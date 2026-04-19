@@ -3,11 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="扣子编程，你的 AI 开发伙伴已就位" />
-    <title>扣子编程 - AI 开发伙伴</title>
+    <meta name="description" content="抗美援朝老兵数字人 - 传承红色基因，弘扬革命精神" />
+    <title>抗美援朝老兵数字人 - 红色教育平台</title>
+    <link href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="antialiased">
+    <div id="app">
+      <!-- 主页面 -->
+      <div class="main-page">
+        <!-- 战火背景 -->
+        <div class="war-background"></div>
+        
+        <!-- 渐变遮罩 -->
+        <div class="gradient-overlay"></div>
+        
+        <!-- 内容区域 -->
+        <div class="content-wrapper">
+          <!-- 标题区域 -->
+          <header class="header">
+            <div class="title-decoration">
+              <div class="star-decoration">★</div>
+              <div class="title-content">
+                <h1 class="main-title">抗美援朝老兵数字人</h1>
+                <p class="subtitle">传承红色基因 · 弘扬革命精神</p>
+              </div>
+              <div class="star-decoration">★</div>
+            </div>
+          </header>
+
+          <!-- 三个模块按钮 -->
+          <main class="modules-container">
+            <!-- 数字人授课模块 -->
+            <a href="#digital-lecture" class="module-card" id="module-lecture">
+              <div class="card-background" style="background-image: url('/soldier-hero.jpg')"></div>
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <div class="module-icon">🎖️</div>
+                <h2 class="module-title">数字人授课</h2>
+                <p class="module-desc">聆听老兵讲述峥嵘岁月</p>
+                <div class="module-footer">
+                  <span class="enter-text">进入学习</span>
+                  <span class="arrow">→</span>
+                </div>
+              </div>
+              <div class="card-border"></div>
+            </a>
+
+            <!-- 互动探究模块 -->
+            <a href="#interactive-explore" class="module-card" id="module-explore">
+              <div class="card-background" style="background-image: url('/soldier-hero.jpg')"></div>
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <div class="module-icon">🔍</div>
+                <h2 class="module-title">互动探究</h2>
+                <p class="module-desc">身临其境探索历史真相</p>
+                <div class="module-footer">
+                  <span class="enter-text">开始探究</span>
+                  <span class="arrow">→</span>
+                </div>
+              </div>
+              <div class="card-border"></div>
+            </a>
+
+            <!-- 学习支持模块 -->
+            <a href="#learning-support" class="module-card" id="module-support">
+              <div class="card-background" style="background-image: url('/veterin-portrait.jpg')"></div>
+              <div class="card-overlay"></div>
+              <div class="card-content">
+                <div class="module-icon">📚</div>
+                <h2 class="module-title">学习支持</h2>
+                <p class="module-desc">丰富的学习资源与资料</p>
+                <div class="module-footer">
+                  <span class="enter-text">获取资料</span>
+                  <span class="arrow">→</span>
+                </div>
+              </div>
+              <div class="card-border"></div>
+            </a>
+          </main>
+
+          <!-- 底部信息 -->
+          <footer class="footer">
+            <div class="footer-content">
+              <p class="footer-text">铭记历史 · 珍爱和平 · 吾辈自强</p>
+            </div>
+          </footer>
+        </div>
+      </div>
+
+      <!-- 子页面容器（示例） -->
+      <div class="sub-page" id="sub-page" style="display: none;">
+        <button class="back-button" onclick="goBack()">← 返回主页</button>
+        <div class="sub-content">
+          <!-- 子页面内容将由 JavaScript 动态加载 -->
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>
