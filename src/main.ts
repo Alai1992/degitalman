@@ -4,7 +4,7 @@ export function initApp(): void {
   const mainPage = document.querySelector('.main-page') as HTMLElement;
   const subPage = document.getElementById('sub-page') as HTMLElement;
   const subContent = document.querySelector('.sub-content') as HTMLElement;
-  const backButton = document.querySelector('.back-button') as HTMLElement;
+  const backButton = document.getElementById('backBtn') as HTMLElement;
 
   if (!mainPage || !subPage) {
     console.error('Required elements not found');
@@ -17,19 +17,29 @@ export function initApp(): void {
       e.preventDefault();
       const target = card.getAttribute('href');
       
-      if (target && target.startsWith('#')) {
-        const moduleId = target.substring(1);
-        
+      if (target) {
         // 数字人授课模块跳转到专门页面
-        if (moduleId === 'digital-lecture') {
-          window.location.href = '/src/pages/digital-lecture.html';
+        if (target.includes('digital-lecture')) {
+          window.location.href = target;
           return;
         }
         
-        showSubPage(moduleId);
+        // 其他锚点跳转
+        if (target.startsWith('#')) {
+          const moduleId = target.substring(1);
+          showSubPage(moduleId);
+        }
       }
     });
   });
+
+  // 返回按钮事件
+  if (backButton) {
+    backButton.addEventListener('click', () => {
+      mainPage.style.display = 'block';
+      subPage.style.display = 'none';
+    });
+  }
 
   // 显示子页面
   function showSubPage(moduleId: string): void {
@@ -77,14 +87,6 @@ export function initApp(): void {
       // 添加子页面样式
       addSubPageStyles();
     }
-  }
-
-  // 返回主页面
-  if (backButton) {
-    backButton.addEventListener('click', () => {
-      mainPage.style.display = 'block';
-      subPage.style.display = 'none';
-    });
   }
 
   // 添加子页面样式
@@ -198,9 +200,4 @@ if (document.readyState === 'loading') {
   });
 } else {
   initApp();
-}
-
-// 返回主页函数
-function goBack(): void {
-  window.location.href = '/';
 }
