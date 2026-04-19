@@ -7,105 +7,6 @@
     <title>数字人授课 - 抗美援朝老兵数字人</title>
     <link href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/digital-lecture.css">
-    <script>
-      // 页面加载完成后初始化所有功能
-      function initLecturePage() {
-        // 返回主页
-        const backButton = document.querySelector('.back-button');
-        if (backButton) {
-          backButton.addEventListener('click', function() {
-            window.location.href = '/';
-          });
-        }
-
-        // 标签页切换
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-          btn.addEventListener('click', function() {
-            // 移除所有active
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.course-panel').forEach(p => p.classList.remove('active'));
-            
-            // 添加active
-            this.classList.add('active');
-            const tabId = this.getAttribute('data-tab');
-            const panel = document.getElementById(tabId + '-panel');
-            if (panel) {
-              panel.classList.add('active');
-            }
-          });
-        });
-
-        // 播放控制
-        let isPlaying = false;
-        let isMuted = false;
-
-        const playBtn = document.querySelector('.play-btn');
-        if (playBtn) {
-          playBtn.addEventListener('click', function() {
-            isPlaying = true;
-            const btnIcon = playBtn.querySelector('.btn-icon');
-            const btnText = playBtn.querySelector('.btn-text');
-            
-            if (btnIcon) btnIcon.textContent = '⏸';
-            if (btnText) btnText.textContent = '播放中';
-            playBtn.classList.add('playing');
-          });
-        }
-
-        const pauseBtn = document.querySelectorAll('.control-btn')[1];
-        if (pauseBtn) {
-          pauseBtn.addEventListener('click', function() {
-            isPlaying = !isPlaying;
-            const playBtn = document.querySelector('.play-btn');
-            const btnIcon = playBtn.querySelector('.btn-icon');
-            const btnText = playBtn.querySelector('.btn-text');
-            
-            if (isPlaying) {
-              if (btnIcon) btnIcon.textContent = '⏸';
-              if (btnText) btnText.textContent = '播放中';
-            } else {
-              if (btnIcon) btnIcon.textContent = '▶';
-              if (btnText) btnText.textContent = '开始播放';
-            }
-          });
-        }
-
-        const volumeBtn = document.querySelectorAll('.control-btn')[2];
-        if (volumeBtn) {
-          volumeBtn.addEventListener('click', function() {
-            isMuted = !isMuted;
-            const volumeIcon = document.getElementById('volume-icon');
-            if (volumeIcon) {
-              volumeIcon.textContent = isMuted ? '🔇' : '🔊';
-            }
-          });
-        }
-
-        // 课程项点击
-        document.querySelectorAll('.course-item').forEach(item => {
-          item.addEventListener('click', function() {
-            const title = this.querySelector('h4');
-            if (title) {
-              // 触发播放
-              const playBtn = document.querySelector('.play-btn');
-              if (playBtn && !playBtn.classList.contains('playing')) {
-                playBtn.click();
-              }
-            }
-          });
-        });
-
-        console.log('数字人授课页面已初始化');
-      }
-
-      // DOM 加载完成后初始化
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initLecturePage);
-      } else {
-        // DOM 已经加载完成
-        initLecturePage();
-      }
-    </script>
   </head>
   <body class="antialiased">
     <div id="app">
@@ -118,7 +19,7 @@
         <div class="gradient-overlay"></div>
         
         <!-- 返回按钮 -->
-        <button class="back-button">
+        <button class="back-button" id="backBtn">
           <span class="back-icon">←</span>
           返回主页
         </button>
@@ -157,15 +58,15 @@
               <div class="control-panel">
                 <div class="control-title">播放控制</div>
                 <div class="control-buttons">
-                  <button class="control-btn play-btn">
+                  <button class="control-btn play-btn" id="playBtn">
                     <span class="btn-icon">▶</span>
                     <span class="btn-text">开始播放</span>
                   </button>
-                  <button class="control-btn">
+                  <button class="control-btn" id="pauseBtn">
                     <span class="btn-icon">⏸</span>
                     <span class="btn-text">暂停</span>
                   </button>
-                  <button class="control-btn">
+                  <button class="control-btn" id="volumeBtn">
                     <span class="btn-icon" id="volume-icon">🔊</span>
                     <span class="btn-text">音量</span>
                   </button>
@@ -461,5 +362,92 @@
         </div>
       </div>
     </div>
+
+    <script>
+      // 等待 DOM 加载完成后执行
+      window.onload = function() {
+        console.log('页面加载完成，开始初始化...');
+        
+        // 返回主页按钮
+        var backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          console.log('找到返回按钮，绑定点击事件');
+          backBtn.onclick = function() {
+            console.log('点击了返回按钮，准备跳转到主页');
+            window.location.href = '/';
+          };
+        } else {
+          console.error('未找到返回按钮');
+        }
+        
+        // 播放按钮
+        var playBtn = document.getElementById('playBtn');
+        if (playBtn) {
+          playBtn.onclick = function() {
+            var icon = playBtn.querySelector('.btn-icon');
+            var text = playBtn.querySelector('.btn-text');
+            if (icon) icon.textContent = '⏸';
+            if (text) text.textContent = '播放中';
+            playBtn.classList.add('playing');
+          };
+        }
+        
+        // 暂停按钮
+        var pauseBtn = document.getElementById('pauseBtn');
+        if (pauseBtn) {
+          pauseBtn.onclick = function() {
+            var playBtn = document.getElementById('playBtn');
+            var icon = playBtn.querySelector('.btn-icon');
+            var text = playBtn.querySelector('.btn-text');
+            if (playBtn.classList.contains('playing')) {
+              playBtn.classList.remove('playing');
+              if (icon) icon.textContent = '▶';
+              if (text) text.textContent = '开始播放';
+            } else {
+              playBtn.classList.add('playing');
+              if (icon) icon.textContent = '⏸';
+              if (text) text.textContent = '播放中';
+            }
+          };
+        }
+        
+        // 音量按钮
+        var volumeBtn = document.getElementById('volumeBtn');
+        var volumeIcon = document.getElementById('volume-icon');
+        var isMuted = false;
+        if (volumeBtn && volumeIcon) {
+          volumeBtn.onclick = function() {
+            isMuted = !isMuted;
+            volumeIcon.textContent = isMuted ? '🔇' : '🔊';
+          };
+        }
+        
+        // 标签页切换
+        var tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(function(btn) {
+          btn.onclick = function() {
+            tabBtns.forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.course-panel').forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            var tabId = this.getAttribute('data-tab');
+            var panel = document.getElementById(tabId + '-panel');
+            if (panel) panel.classList.add('active');
+          };
+        });
+        
+        // 课程项点击
+        var courseItems = document.querySelectorAll('.course-item');
+        courseItems.forEach(function(item) {
+          item.onclick = function() {
+            var playBtn = document.getElementById('playBtn');
+            if (playBtn && !playBtn.classList.contains('playing')) {
+              playBtn.click();
+            }
+          };
+        });
+        
+        console.log('初始化完成');
+      };
+    </script>
   </body>
 </html>
