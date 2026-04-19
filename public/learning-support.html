@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="学习支持 - 丰富的历史学习资源" />
+    <title>学习支持 - 抗美援朝老兵数字人</title>
+    <link href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/learning-support.css">
+  </head>
+  <body class="antialiased">
+    <div id="app">
+      <!-- 学习支持页面 -->
+      <div class="learning-page">
+        <!-- 战火背景 -->
+        <div class="war-background"></div>
+        
+        <!-- 渐变遮罩 -->
+        <div class="gradient-overlay"></div>
+        
+        <!-- 返回按钮 -->
+        <button class="back-button" id="backBtn">
+          <span class="back-icon">←</span>
+          返回主页
+        </button>
+        
+        <!-- 内容区域 -->
+        <div class="page-content">
+          <!-- 页面标题 -->
+          <header class="page-header">
+            <div class="header-badge">
+              <span class="badge-icon">📚</span>
+              学习支持
+            </div>
+            <h1 class="page-title">知识宝库</h1>
+            <p class="page-subtitle">丰富的历史学习资源，助力深入了解抗美援朝历史</p>
+          </header>
+
+          <!-- 资源分类导航 -->
+          <nav class="resource-nav">
+            <button class="nav-btn active" data-category="documents">
+              <span class="nav-icon">📄</span>
+              <span class="nav-text">文献档案</span>
+            </button>
+            <button class="nav-btn" data-category="media">
+              <span class="nav-icon">🎬</span>
+              <span class="nav-text">影像资料</span>
+            </button>
+            <button class="nav-btn" data-category="books">
+              <span class="nav-icon">📚</span>
+              <span class="nav-text">电子书籍</span>
+            </button>
+            <button class="nav-btn" data-category="audio">
+              <span class="nav-icon">🎵</span>
+              <span class="nav-text">音频资源</span>
+            </button>
+            <button class="nav-btn" data-category="maps">
+              <span class="nav-icon">🗺️</span>
+              <span class="nav-text">历史地图</span>
+            </button>
+            <button class="nav-btn" data-category="museums">
+              <span class="nav-icon">🏛️</span>
+              <span class="nav-text">纪念馆</span>
+            </button>
+          </nav>
+
+          <!-- 资源列表区域 -->
+          <div class="resources-container">
+            <!-- 文献档案 -->
+            <div class="resource-panel active" id="documents-panel">
+              <div class="panel-header">
+                <h2><span>📄</span> 文献档案</h2>
+                <p class="panel-desc">珍藏的历史文献、作战命令、战报通讯等一手资料</p>
+              </div>
+              <div class="resource-grid">
+                <div class="resource-item">
+                  <div class="item-icon">📜</div>
+                  <div class="item-content">
+                    <h3>志愿军作战命令汇编</h3>
+                    <p>收录1950年至1953年志愿军总部发布的重大作战命令原文</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">命令文书</span>
+                      <span class="meta-size">PDF 2.3MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📋</div>
+                  <div class="item-content">
+                    <h3>战地日记选编</h3>
+                    <p>收录彭德怀司令员及多位志愿军指战员的珍贵战地日记</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">日记手稿</span>
+                      <span class="meta-size">PDF 5.8MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📨</div>
+                  <div class="item-content">
+                    <h3>往来电报精选</h3>
+                    <p>毛泽东主席与志愿军总部的重要电报往来记录</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">电报档案</span>
+                      <span class="meta-size">PDF 1.5MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📊</div>
+                  <div class="item-content">
+                    <h3>战役伤亡统计</h3>
+                    <p>抗美援朝战争历次战役敌我双方伤亡数据详尽统计</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">数据汇编</span>
+                      <span class="meta-size">Excel 0.8MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎖️</div>
+                  <div class="item-content">
+                    <h3>立功受奖材料</h3>
+                    <p>志愿军战士立功受奖的审批材料与先进事迹材料</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">荣誉档案</span>
+                      <span class="meta-size">PDF 12.5MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📝</div>
+                  <div class="item-content">
+                    <h3>军事会议记录</h3>
+                    <p>志愿军重要军事会议的原版记录与决议文件</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">会议纪要</span>
+                      <span class="meta-size">PDF 3.2MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📮</div>
+                  <div class="item-content">
+                    <h3>家书影印件</h3>
+                    <p>志愿军战士写给家人的书信手稿影印件合集</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">私人档案</span>
+                      <span class="meta-size">PDF 8.6MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📁</div>
+                  <div class="item-content">
+                    <h3>后勤保障档案</h3>
+                    <p>抗美援朝战争中后勤补给、运输、供应等工作档案</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">后勤资料</span>
+                      <span class="meta-size">PDF 4.1MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查阅</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 影像资料 -->
+            <div class="resource-panel" id="media-panel">
+              <div class="panel-header">
+                <h2><span>🎬</span> 影像资料</h2>
+                <p class="panel-desc">珍贵的历史纪录片、战场影像、新闻报道等视频资料</p>
+              </div>
+              <div class="resource-grid">
+                <div class="resource-item">
+                  <div class="item-icon">🎞️</div>
+                  <div class="item-content">
+                    <h3>抗美援朝纪录片全集</h3>
+                    <p>中央新闻纪录电影制片厂拍摄的完整纪录片系列，共12集</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">纪录片</span>
+                      <span class="meta-size">720P 4.2GB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📽️</div>
+                  <div class="item-content">
+                    <h3>战场珍贵影像</h3>
+                    <p>志愿军战地记者拍摄的战场实况影像资料合集</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">纪实影像</span>
+                      <span class="meta-size">480P 1.8GB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📰</div>
+                  <div class="item-content">
+                    <h3>新闻电影简报</h3>
+                    <p>1950年至1953年《新闻简报》中的抗美援朝专题</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">新闻专题</span>
+                      <span class="meta-size">480P 890MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎥</div>
+                  <div class="item-content">
+                    <h3>志愿军英模大会</h3>
+                    <p>1953年全国文艺工作者慰问演出纪录片</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">演出记录</span>
+                      <span class="meta-size">720P 2.1GB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🛩️</div>
+                  <div class="item-content">
+                    <h3>空战实录</h3>
+                    <p>志愿军空军战斗英雄王海大队空战影像资料</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">空战影像</span>
+                      <span class="meta-size">480P 650MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🚂</div>
+                  <div class="item-content">
+                    <h3>钢铁运输线</h3>
+                    <p>记录铁路抢修队保障后勤运输的专题纪录片</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">后勤专题</span>
+                      <span class="meta-size">720P 1.2GB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🏥</div>
+                  <div class="item-content">
+                    <h3>战地医疗救护</h3>
+                    <p>记录志愿军医护人员在战地进行救护的珍贵影像</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">医疗记录</span>
+                      <span class="meta-size">480P 780MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎌</div>
+                  <div class="item-content">
+                    <h3>停战协定签字</h3>
+                    <p>1953年7月27日板门店停战协定签字仪式影像</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">历史时刻</span>
+                      <span class="meta-size">720P 320MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">观看</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 电子书籍 -->
+            <div class="resource-panel" id="books-panel">
+              <div class="panel-header">
+                <h2><span>📚</span> 电子书籍</h2>
+                <p class="panel-desc">关于抗美援朝战争的专著、回忆录、小说等电子书资源</p>
+              </div>
+              <div class="resource-grid">
+                <div class="resource-item">
+                  <div class="item-icon">📕</div>
+                  <div class="item-content">
+                    <h3>《志愿军一日》</h3>
+                    <p>真实记录志愿军战士战斗生活的文学作品集</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">文学著作</span>
+                      <span class="meta-size">PDF 15.6MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📗</div>
+                  <div class="item-content">
+                    <h3>《最可爱的人》</h3>
+                    <p>魏巍报告文学经典，记录朝鲜战场上的感人事迹</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">报告文学</span>
+                      <span class="meta-size">PDF 8.2MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📘</div>
+                  <div class="item-content">
+                    <h3>《上甘岭》</h3>
+                    <p>陆柱国所著小说，描写上甘岭战役的壮烈场景</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">战争小说</span>
+                      <span class="meta-size">PDF 6.5MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📙</div>
+                  <div class="item-content">
+                    <h3>《彭德怀自述》</h3>
+                    <p>彭德怀元帅亲笔撰写的回忆录，详述抗美援朝决策过程</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">回忆录</span>
+                      <span class="meta-size">PDF 12.3MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📓</div>
+                  <div class="item-content">
+                    <h3>《铁血长津湖》</h3>
+                    <p>详细记述长津湖战役始末的历史纪实作品</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">历史纪实</span>
+                      <span class="meta-size">PDF 9.8MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📔</div>
+                  <div class="item-content">
+                    <h3>《英雄儿女》</h3>
+                    <p>根据抗美援朝真实故事改编的电影剧本与创作手记</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">剧本文献</span>
+                      <span class="meta-size">PDF 4.7MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📒</div>
+                  <div class="item-content">
+                    <h3>《抗美援朝战争史》</h3>
+                    <p>军事科学院编写的权威战争史专著，三卷本</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">军事专著</span>
+                      <span class="meta-size">PDF 45.2MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📑</div>
+                  <div class="item-content">
+                    <h3>《志愿军老兵访谈录》</h3>
+                    <p>百位志愿军老战士口述历史记录整理</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">口述历史</span>
+                      <span class="meta-size">PDF 22.8MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">阅读</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 音频资源 -->
+            <div class="resource-panel" id="audio-panel">
+              <div class="panel-header">
+                <h2><span>🎵</span> 音频资源</h2>
+                <p class="panel-desc">抗美援朝时期的革命歌曲、广播录音、电台节目等音频资源</p>
+              </div>
+              <div class="resource-grid">
+                <div class="resource-item">
+                  <div class="item-icon">🎼</div>
+                  <div class="item-content">
+                    <h3>《中国人民志愿军战歌》</h3>
+                    <p>雄赳赳气昂昂跨过鸭绿江 original recording</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">革命歌曲</span>
+                      <span class="meta-size">MP3 3.2MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎹</div>
+                  <div class="item-content">
+                    <h3>《英雄的赞歌》</h3>
+                    <p>歌颂志愿军战士的经典革命歌曲</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">革命歌曲</span>
+                      <span class="meta-size">MP3 4.1MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎸</div>
+                  <div class="item-content">
+                    <h3>《抗美援朝组歌》</h3>
+                    <p>总政文工团演唱的抗美援朝专题组曲</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">组曲</span>
+                      <span class="meta-size">MP3 28.5MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">📻</div>
+                  <div class="item-content">
+                    <h3>战争广播录音</h3>
+                    <p>1950年至1953年中央人民广播电台抗美援朝专题节目</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">广播录音</span>
+                      <span class="meta-size">MP3 156MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎤</div>
+                  <div class="item-content">
+                    <h3>彭德怀讲话录音</h3>
+                    <p>彭德怀司令员在重要场合的讲话原声音频</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">人物讲话</span>
+                      <span class="meta-size">MP3 45MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎺</div>
+                  <div class="item-content">
+                    <h3>《我的祖国》</h3>
+                    <p>电影《上甘岭》插曲 original soundtrack</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">电影插曲</span>
+                      <span class="meta-size">MP3 5.8MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎻</div>
+                  <div class="item-content">
+                    <h3>《志愿军军歌》</h3>
+                    <p>志愿军进行曲 original recording</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">军歌</span>
+                      <span class="meta-size">MP3 2.9MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🎵</div>
+                  <div class="item-content">
+                    <h3>战场故事会</h3>
+                    <p>志愿军战士讲述的战斗故事音频节目</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">故事讲述</span>
+                      <span class="meta-size">MP3 89MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">播放</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 历史地图 -->
+            <div class="resource-panel" id="maps-panel">
+              <div class="panel-header">
+                <h2><span>🗺️</span> 历史地图</h2>
+                <p class="panel-desc">抗美援朝战争期间的作战地图、形势图、行军路线图等</p>
+              </div>
+              <div class="resource-grid">
+                <div class="resource-item">
+                  <div class="item-icon">🗺️</div>
+                  <div class="item-content">
+                    <h3>朝鲜半岛地形图</h3>
+                    <p>标注主要城市、山脉、河流的朝鲜半岛地形图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">地形图</span>
+                      <span class="meta-size">JPG 3.5MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">⚔️</div>
+                  <div class="item-content">
+                    <h3>五次战役作战图</h3>
+                    <p>详细标注五次战役进攻路线与主要战场的作战态势图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">作战图</span>
+                      <span class="meta-size">JPG 8.2MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🏔️</div>
+                  <div class="item-content">
+                    <h3>长津湖战役地图</h3>
+                    <p>标注志愿军第九兵团进攻路线与美军撤退路线的专题地图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">专题地图</span>
+                      <span class="meta-size">JPG 5.6MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">⛰️</div>
+                  <div class="item-content">
+                    <h3>上甘岭战役地图</h3>
+                    <p>标注上甘岭地区阵地分布与敌军进攻方向的态势图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">专题地图</span>
+                      <span class="meta-size">JPG 6.1MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🌊</div>
+                  <div class="item-content">
+                    <h3>鸭绿江渡江路线图</h3>
+                    <p>标注志愿军各部队渡江地点与时间的历史路线图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">行军图</span>
+                      <span class="meta-size">JPG 4.8MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🛤️</div>
+                  <div class="item-content">
+                    <h3>后勤运输线地图</h3>
+                    <p>标注志愿军后勤运输线路与关键补给点的示意图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">后勤图</span>
+                      <span class="meta-size">JPG 7.3MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">✈️</div>
+                  <div class="item-content">
+                    <h3>米格走廊空战图</h3>
+                    <p>标注志愿军空军作战区域与敌我态势的空战示意图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">空战图</span>
+                      <span class="meta-size">JPG 4.2MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+                <div class="resource-item">
+                  <div class="item-icon">🏰</div>
+                  <div class="item-content">
+                    <h3>停战分界线地图</h3>
+                    <p>标注三八线与最终停战分界线的政治军事分界线图</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">分界图</span>
+                      <span class="meta-size">JPG 3.9MB</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">查看</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 纪念馆 -->
+            <div class="resource-panel" id="museums-panel">
+              <div class="panel-header">
+                <h2><span>🏛️</span> 纪念馆</h2>
+                <p class="panel-desc">抗美援朝相关纪念馆、纪念设施的在线参观入口与资料</p>
+              </div>
+              <div class="resource-grid">
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🏛️</div>
+                  <div class="item-content">
+                    <h3>抗美援朝纪念馆</h3>
+                    <p>位于辽宁丹东，全面展示抗美援朝战争历史的综合性纪念馆</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">国家级纪念馆</span>
+                      <span class="meta-tag">辽宁丹东</span>
+                    </div>
+                  </div>
+                  <a href="https://www.kmycjng.com" target="_blank" class="item-btn">访问</a>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🗼</div>
+                  <div class="item-content">
+                    <h3>中国人民革命军事博物馆</h3>
+                    <p>北京军事博物馆，抗美援朝战争展区收藏大量珍贵文物</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">国家级博物馆</span>
+                      <span class="meta-tag">北京</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🎗️</div>
+                  <div class="item-content">
+                    <h3>上甘岭纪念馆</h3>
+                    <p>位于湖北黄石，上甘岭战役纪念馆，展示战役全过程</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">战役纪念馆</span>
+                      <span class="meta-tag">湖北黄石</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🏔️</div>
+                  <div class="item-content">
+                    <h3>长津湖战役纪念馆</h3>
+                    <p>位于吉林敦化，纪念长津湖战役的专题纪念馆</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">战役纪念馆</span>
+                      <span class="meta-tag">吉林敦化</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🛳️</div>
+                  <div class="item-content">
+                    <h3>鸭绿江断桥景区</h3>
+                    <p>丹东鸭绿江断桥，见证志愿军渡江的历史遗迹</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">历史遗迹</span>
+                      <span class="meta-tag">辽宁丹东</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🏯</div>
+                  <div class="item-content">
+                    <h3>板门店谈判旧址</h3>
+                    <p>朝韩边境板门店，停战协定签署地，历史见证</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">谈判旧址</span>
+                      <span class="meta-tag">朝韩边境</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🪦</div>
+                  <div class="item-content">
+                    <h3>志愿军烈士陵园</h3>
+                    <p>沈阳抗美援朝烈士陵园，安葬志愿军烈士的纪念场所</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">烈士陵园</span>
+                      <span class="meta-tag">辽宁沈阳</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+                <div class="resource-item museum-item">
+                  <div class="item-icon">🗿</div>
+                  <div class="item-content">
+                    <h3>松骨峰特功连纪念馆</h3>
+                    <p>纪念松骨峰战斗英雄集体的专题纪念馆</p>
+                    <div class="item-meta">
+                      <span class="meta-tag">荣誉连队纪念馆</span>
+                      <span class="meta-tag">河北</span>
+                    </div>
+                  </div>
+                  <button class="item-btn">访问</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.onload = function() {
+        console.log('学习支持页面加载完成');
+        
+        // 返回主页
+        var backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.onclick = function() {
+            window.location.href = '/';
+          };
+        }
+        
+        // 导航按钮切换
+        var navBtns = document.querySelectorAll('.nav-btn');
+        navBtns.forEach(function(btn) {
+          btn.onclick = function() {
+            navBtns.forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.resource-panel').forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            var category = this.getAttribute('data-category');
+            var panel = document.getElementById(category + '-panel');
+            if (panel) panel.classList.add('active');
+          };
+        });
+        
+        console.log('学习支持页面初始化完成');
+      };
+    </script>
+  </body>
+</html>

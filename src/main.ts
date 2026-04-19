@@ -30,6 +30,12 @@ export function initApp(): void {
           return;
         }
         
+        // 学习支持模块跳转到资源页面
+        if (target.includes('learning-support')) {
+          window.location.href = target;
+          return;
+        }
+        
         // 其他锚点跳转
         if (target.startsWith('#')) {
           const moduleId = target.substring(1);
