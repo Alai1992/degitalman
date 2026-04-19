@@ -19,6 +19,13 @@ export function initApp(): void {
       
       if (target && target.startsWith('#')) {
         const moduleId = target.substring(1);
+        
+        // 数字人授课模块跳转到专门页面
+        if (moduleId === 'digital-lecture') {
+          window.location.href = '/src/pages/digital-lecture.html';
+          return;
+        }
+        
         showSubPage(moduleId);
       }
     });
@@ -191,4 +198,9 @@ if (document.readyState === 'loading') {
   });
 } else {
   initApp();
+}
+
+// 返回主页函数
+function goBack(): void {
+  window.location.href = '/';
 }
