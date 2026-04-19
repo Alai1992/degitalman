@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import chatRouter from './chat';
 
 const router = Router();
 
@@ -27,5 +28,8 @@ router.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// 聊天接口
+router.use(chatRouter);
 
 export default router;

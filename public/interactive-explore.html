@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="互动探究 - 与老兵对话" />
+    <title>互动探究 - 抗美援朝老兵数字人</title>
+    <link href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/interactive-explore.css">
+  </head>
+  <body class="antialiased">
+    <div id="app">
+      <!-- 互动探究页面 -->
+      <div class="explore-page">
+        <!-- 战火背景 -->
+        <div class="war-background"></div>
+        
+        <!-- 渐变遮罩 -->
+        <div class="gradient-overlay"></div>
+        
+        <!-- 返回按钮 -->
+        <button class="back-button" id="backBtn">
+          <span class="back-icon">←</span>
+          返回主页
+        </button>
+        
+        <!-- 内容区域 -->
+        <div class="page-content">
+          <!-- 页面标题 -->
+          <header class="page-header">
+            <div class="header-badge">
+              <span class="badge-icon">🔍</span>
+              互动探究
+            </div>
+            <h1 class="page-title">与历史对话</h1>
+            <p class="page-subtitle">探索抗美援朝历史的点点滴滴</p>
+          </header>
+
+          <!-- 聊天区域 -->
+          <div class="chat-container">
+            <!-- 聊天消息区域 -->
+            <div class="chat-messages" id="chatMessages">
+              <!-- 欢迎消息 -->
+              <div class="message bot-message">
+                <div class="message-avatar">👴</div>
+                <div class="message-content">
+                  <div class="message-text">
+                    您好，我是经历过那场战争的老兵。有什么想了解的，尽管问吧。
+                  </div>
+                  <div class="message-time">系统</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 输入区域 -->
+            <div class="chat-input-area">
+              <div class="input-container">
+                <textarea 
+                  class="chat-input" 
+                  id="chatInput" 
+                  placeholder="请输入您的问题..."
+                  rows="1"
+                ></textarea>
+                <button class="send-button" id="sendBtn">
+                  <span class="send-icon">➤</span>
+                  发送
+                </button>
+              </div>
+              <div class="input-hint">
+                提示：您可以询问关于战役、英雄、后勤、战略等各类问题
+              </div>
+            </div>
+          </div>
+
+          <!-- 快捷问题 -->
+          <div class="quick-questions">
+            <div class="quick-title">试试这些问题</div>
+            <div class="quick-buttons">
+              <button class="quick-btn" data-question="请讲讲长津湖战役的故事">长津湖战役的故事</button>
+              <button class="quick-btn" data-question="上甘岭战役有多激烈">上甘岭战役有多激烈</button>
+              <button class="quick-btn" data-question="志愿军战士的日常生活是怎样的">战士的日常生活</button>
+              <button class="quick-btn" data-question="为什么说上甘岭精神">上甘岭精神</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 全局变量
+      var isStreaming = false;
+      var conversationHistory = [];
+
+      // 页面加载完成后初始化
+      window.onload = function() {
+        console.log('初始化互动探究页面...');
+        
+        // 返回主页
+        var backBtn = document.getElementById('backBtn');
+        if (backBtn) {
+          backBtn.onclick = function() {
+            window.location.href = '/';
+          };
+        }
+
+        // 发送按钮
+        var sendBtn = document.getElementById('sendBtn');
+        var chatInput = document.getElementById('chatInput');
+        
+        if (sendBtn && chatInput) {
+          sendBtn.onclick = function() {
+            var message = chatInput.value.trim();
+            if (message) {
+              sendMessage(message);
+              chatInput.value = '';
+            }
+          };
+
+          // 回车发送
+          chatInput.onkeydown = function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              var message = chatInput.value.trim();
+              if (message) {
+                sendMessage(message);
+                chatInput.value = '';
+              }
+            }
+          };
+
+          // 自动调整高度
+          chatInput.oninput = function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+          };
+        }
+
+        // 快捷问题
+        var quickBtns = document.querySelectorAll('.quick-btn');
+        quickBtns.forEach(function(btn) {
+          btn.onclick = function() {
+            var question = this.getAttribute('data-question');
+            if (question) {
+              sendMessage(question);
+            }
+          };
+        });
+
+        console.log('初始化完成');
+      };
+
+      // 发送消息
+      function sendMessage(message) {
+        if (isStreaming) return;
+        
+        var chatMessages = document.getElementById('chatMessages');
+        if (!chatMessages) return;
+
+        // 添加用户消息
+        addUserMessage(message);
+        
+        // 添加空的消息气泡用于流式输出
+        var messageId = 'msg-' + Date.now();
+        addBotMessage('', messageId);
+        
+        // 滚动到底部
+        scrollToBottom();
+        
+        // 发送请求
+        streamResponse(message, messageId);
+      }
+
+      // 添加用户消息
+      function addUserMessage(text) {
+        var chatMessages = document.getElementById('chatMessages');
+        var userMsg = document.createElement('div');
+        userMsg.className = 'message user-message';
+        userMsg.innerHTML = 
+          '<div class="message-content">' +
+            '<div class="message-text">' + escapeHtml(text) + '</div>' +
+            '<div class="message-time">' + formatTime(new Date()) + '</div>' +
+          '</div>' +
+          '<div class="message-avatar">👤</div>';
+        chatMessages.appendChild(userMsg);
+        
+        // 保存对话历史
+        conversationHistory.push({
+          role: 'user',
+          content: text
+        });
+      }
+
+      // 添加机器人消息
+      function addBotMessage(text, messageId) {
+        var chatMessages = document.getElementById('chatMessages');
+        var botMsg = document.createElement('div');
+        botMsg.className = 'message bot-message';
+        botMsg.id = messageId;
+        botMsg.innerHTML = 
+          '<div class="message-avatar">👴</div>' +
+          '<div class="message-content">' +
+            '<div class="message-text"></div>' +
+            '<div class="message-time">老兵</div>' +
+          '</div>';
+        chatMessages.appendChild(botMsg);
+        return botMsg;
+      }
+
+      // 流式获取响应
+      async function streamResponse(message, messageId) {
+        isStreaming = true;
+        var sendBtn = document.getElementById('sendBtn');
+        if (sendBtn) {
+          sendBtn.innerHTML = '<span class="loading-icon">⏳</span> 回复中';
+          sendBtn.disabled = true;
+        }
+
+        try {
+          var response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              messages: conversationHistory,
+              userMessage: message
+            })
+          });
+
+          var reader = response.body.getReader();
+          var decoder = new TextDecoder();
+          var messageEl = document.getElementById(messageId);
+          var textEl = messageEl.querySelector('.message-text');
+          var fullText = '';
+
+          while (true) {
+            var result = await reader.read();
+            if (result.done) break;
+            
+            var chunk = decoder.decode(result.value);
+            fullText += chunk;
+            
+            // 更新消息内容，逐字显示效果
+            textEl.textContent = fullText;
+            scrollToBottom();
+          }
+
+          // 保存对话历史
+          conversationHistory.push({
+            role: 'assistant',
+            content: fullText
+          });
+
+        } catch (error) {
+          console.error('请求失败:', error);
+          var messageEl = document.getElementById(messageId);
+          if (messageEl) {
+            var textEl = messageEl.querySelector('.message-text');
+            textEl.textContent = '抱歉，服务出现问题，请稍后再试。';
+          }
+        }
+
+        isStreaming = false;
+        if (sendBtn) {
+          sendBtn.innerHTML = '<span class="send-icon">➤</span> 发送';
+          sendBtn.disabled = false;
+        }
+      }
+
+      // 滚动到底部
+      function scrollToBottom() {
+        var chatMessages = document.getElementById('chatMessages');
+        if (chatMessages) {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+      }
+
+      // 格式化时间
+      function formatTime(date) {
+        var hours = date.getHours().toString().padStart(2, '0');
+        var minutes = date.getMinutes().toString().padStart(2, '0');
+        return hours + ':' + minutes;
+      }
+
+      // HTML转义
+      function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+    </script>
+  </body>
+</html>

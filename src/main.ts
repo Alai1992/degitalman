@@ -24,6 +24,12 @@ export function initApp(): void {
           return;
         }
         
+        // 互动探究模块跳转到聊天页面
+        if (target.includes('interactive-explore')) {
+          window.location.href = target;
+          return;
+        }
+        
         // 其他锚点跳转
         if (target.startsWith('#')) {
           const moduleId = target.substring(1);
