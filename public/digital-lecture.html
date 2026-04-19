@@ -19,7 +19,7 @@
         <div class="gradient-overlay"></div>
         
         <!-- 返回按钮 -->
-        <button class="back-button" onclick="goBack()">
+        <button class="back-button">
           <span class="back-icon">←</span>
           返回主页
         </button>
@@ -58,15 +58,15 @@
               <div class="control-panel">
                 <div class="control-title">播放控制</div>
                 <div class="control-buttons">
-                  <button class="control-btn play-btn" onclick="startPlay()">
+                  <button class="control-btn play-btn">
                     <span class="btn-icon">▶</span>
                     <span class="btn-text">开始播放</span>
                   </button>
-                  <button class="control-btn" onclick="togglePause()">
+                  <button class="control-btn">
                     <span class="btn-icon">⏸</span>
                     <span class="btn-text">暂停</span>
                   </button>
-                  <button class="control-btn" onclick="toggleMute()">
+                  <button class="control-btn">
                     <span class="btn-icon" id="volume-icon">🔊</span>
                     <span class="btn-text">音量</span>
                   </button>
@@ -88,7 +88,7 @@
               <div class="course-list">
                 <!-- 老兵故事 -->
                 <div class="course-panel active" id="stories-panel">
-                  <div class="course-item" onclick="playCourse('一把炒面一把雪')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">🎖️</div>
                       <div class="course-duration">12:35</div>
@@ -103,7 +103,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('松骨峰战役回忆')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">🛡️</div>
                       <div class="course-duration">18:42</div>
@@ -118,7 +118,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('长津湖的冬天')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">❄️</div>
                       <div class="course-duration">15:20</div>
@@ -133,7 +133,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('上甘岭的43天')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">🏔️</div>
                       <div class="course-duration">22:18</div>
@@ -151,7 +151,7 @@
 
                 <!-- 战争综述 -->
                 <div class="course-panel" id="history-panel">
-                  <div class="course-item" onclick="playCourse('抗美援朝战争背景')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">📜</div>
                       <div class="course-duration">25:00</div>
@@ -166,7 +166,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('五次战役详解')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">⚔️</div>
                       <div class="course-duration">35:42</div>
@@ -181,7 +181,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('中朝友谊与国际支援')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">🤝</div>
                       <div class="course-duration">20:15</div>
@@ -199,7 +199,7 @@
 
                 <!-- 英雄事迹 -->
                 <div class="course-panel" id="heroes-panel">
-                  <div class="course-item" onclick="playCourse('杨根思')">
+                  <div class="course-item">
                     <div class="course-thumbnail hero-thumbnail">
                       <div class="thumbnail-placeholder">⭐</div>
                     </div>
@@ -213,7 +213,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('邱少云')">
+                  <div class="course-item">
                     <div class="course-thumbnail hero-thumbnail">
                       <div class="thumbnail-placeholder">🔥</div>
                     </div>
@@ -227,7 +227,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('黄继光')">
+                  <div class="course-item">
                     <div class="course-thumbnail hero-thumbnail">
                       <div class="thumbnail-placeholder">💫</div>
                     </div>
@@ -241,7 +241,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('罗盛教')">
+                  <div class="course-item">
                     <div class="course-thumbnail hero-thumbnail">
                       <div class="thumbnail-placeholder">🌟</div>
                     </div>
@@ -258,7 +258,7 @@
 
                 <!-- 历史知识 -->
                 <div class="course-panel" id="knowledge-panel">
-                  <div class="course-item" onclick="playCourse('坑道作战')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">🏠</div>
                       <div class="course-duration">10:30</div>
@@ -273,7 +273,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('米格走廊')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">✈️</div>
                       <div class="course-duration">14:20</div>
@@ -288,7 +288,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('钢铁运输线')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">🚂</div>
                       <div class="course-duration">12:45</div>
@@ -303,7 +303,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item" onclick="playCourse('卫生员的故事')">
+                  <div class="course-item">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">💊</div>
                       <div class="course-duration">11:15</div>
@@ -364,70 +364,91 @@
     </div>
 
     <script>
-      // 返回主页
-      function goBack() {
-        window.location.href = '/';
-      }
+      // 确保 DOM 加载完成后绑定事件
+      document.addEventListener('DOMContentLoaded', function() {
+        // 返回主页
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+          backButton.addEventListener('click', function() {
+            window.location.href = '/';
+          });
+        }
 
-      // 标签页切换
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          // 移除所有active
-          document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-          document.querySelectorAll('.course-panel').forEach(p => p.classList.remove('active'));
-          
-          // 添加active
-          this.classList.add('active');
-          const tabId = this.getAttribute('data-tab');
-          document.getElementById(tabId + '-panel').classList.add('active');
+        // 标签页切换
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            // 移除所有active
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.course-panel').forEach(p => p.classList.remove('active'));
+            
+            // 添加active
+            this.classList.add('active');
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(tabId + '-panel').classList.add('active');
+          });
+        });
+
+        // 播放控制
+        let isPlaying = false;
+        let isMuted = false;
+
+        const playBtn = document.querySelector('.play-btn');
+        if (playBtn) {
+          playBtn.addEventListener('click', function() {
+            isPlaying = true;
+            const btnIcon = playBtn.querySelector('.btn-icon');
+            const btnText = playBtn.querySelector('.btn-text');
+            
+            if (btnIcon) btnIcon.textContent = '⏸';
+            if (btnText) btnText.textContent = '播放中';
+            playBtn.classList.add('playing');
+          });
+        }
+
+        const pauseBtn = document.querySelectorAll('.control-btn')[1];
+        if (pauseBtn) {
+          pauseBtn.addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            const playBtn = document.querySelector('.play-btn');
+            const btnIcon = playBtn.querySelector('.btn-icon');
+            const btnText = playBtn.querySelector('.btn-text');
+            
+            if (isPlaying) {
+              if (btnIcon) btnIcon.textContent = '⏸';
+              if (btnText) btnText.textContent = '播放中';
+            } else {
+              if (btnIcon) btnIcon.textContent = '▶';
+              if (btnText) btnText.textContent = '开始播放';
+            }
+          });
+        }
+
+        const volumeBtn = document.querySelectorAll('.control-btn')[2];
+        if (volumeBtn) {
+          volumeBtn.addEventListener('click', function() {
+            isMuted = !isMuted;
+            const volumeIcon = document.getElementById('volume-icon');
+            if (volumeIcon) {
+              volumeIcon.textContent = isMuted ? '🔇' : '🔊';
+            }
+          });
+        }
+
+        // 课程项点击
+        document.querySelectorAll('.course-item').forEach(item => {
+          item.addEventListener('click', function() {
+            const title = this.querySelector('h4');
+            if (title) {
+              console.log('播放课程:', title.textContent);
+              // 触发播放
+              const playBtn = document.querySelector('.play-btn');
+              if (playBtn && !playBtn.classList.contains('playing')) {
+                playBtn.click();
+              }
+            }
+          });
         });
       });
-
-      // 播放控制
-      let isPlaying = false;
-      let isMuted = false;
-
-      function startPlay() {
-        isPlaying = true;
-        const playBtn = document.querySelector('.play-btn');
-        const btnIcon = playBtn.querySelector('.btn-icon');
-        const btnText = playBtn.querySelector('.btn-text');
-        
-        btnIcon.textContent = '⏸';
-        btnText.textContent = '播放中';
-        playBtn.classList.add('playing');
-        
-        alert('数字人授课播放功能开发中...');
-      }
-
-      function togglePause() {
-        isPlaying = !isPlaying;
-        const playBtn = document.querySelector('.play-btn');
-        const btnIcon = playBtn.querySelector('.btn-icon');
-        const btnText = playBtn.querySelector('.btn-text');
-        
-        if (isPlaying) {
-          btnIcon.textContent = '⏸';
-          btnText.textContent = '播放中';
-        } else {
-          btnIcon.textContent = '▶';
-          btnText.textContent = '开始播放';
-        }
-      }
-
-      function toggleMute() {
-        isMuted = !isMuted;
-        const volumeIcon = document.getElementById('volume-icon');
-        volumeIcon.textContent = isMuted ? '🔇' : '🔊';
-      }
-
-      function playCourse(courseName) {
-        const playBtn = document.querySelector('.play-btn');
-        if (!playBtn.classList.contains('playing')) {
-          startPlay();
-        }
-        console.log('播放课程:', courseName);
-      }
     </script>
   </body>
 </html>
