@@ -36,25 +36,24 @@
             <p class="page-subtitle">通过数字人技术，重现老兵讲述的峥嵘岁月</p>
           </header>
 
-          <!-- 主内容区：视频在左下角，课程列表在右侧 -->
+          <!-- 主内容区：视频在左侧，课程列表在右侧 -->
           <div class="main-layout">
             <!-- 左侧：视频播放区 -->
             <div class="video-section">
               <div class="video-container">
-                <!-- 视频播放器 -->
                 <video id="courseVideo" class="video-player" controls playsinline>
                   您的浏览器不支持视频播放
                 </video>
-                <!-- 视频标题栏 -->
-                <div class="video-title-bar" id="videoTitleBar">
-                  <span class="video-title-icon">🎬</span>
-                  <span class="video-title-text" id="currentVideoTitle">选择课程开始播放</span>
-                </div>
+              </div>
+              
+              <!-- 视频标题栏 -->
+              <div class="video-title-bar" id="videoTitleBar">
+                <span class="video-title-icon">🎬</span>
+                <span class="video-title-text" id="currentVideoTitle">选择课程开始播放</span>
               </div>
               
               <!-- 控制面板 -->
               <div class="control-panel">
-                <div class="control-title">播放控制</div>
                 <div class="control-buttons">
                   <button class="control-btn" id="playBtn">
                     <span class="btn-icon">▶</span>
@@ -93,7 +92,6 @@
                     <p>极寒环境下的生死考验</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：张志远</span>
-                      <span class="meta-item">👁️ 3.1万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -105,10 +103,9 @@
                   </div>
                   <div class="course-info">
                     <h4>一把炒面一把雪</h4>
-                    <p>讲述志愿军在朝鲜战场上的艰苦生活</p>
+                    <p>志愿军在朝鲜战场上的艰苦生活</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：李明</span>
-                      <span class="meta-item">👁️ 1.2万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -123,7 +120,6 @@
                     <p>幸存战士讲述那场惨烈的阻击战</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：王建国</span>
-                      <span class="meta-item">👁️ 2.3万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -138,7 +134,6 @@
                     <p>钢铁阵地上的英雄赞歌</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：刘德明</span>
-                      <span class="meta-item">👁️ 4.5万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -153,7 +148,6 @@
                     <p>志愿军空军的辉煌战绩</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：赵大海</span>
-                      <span class="meta-item">👁️ 2.8万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -168,7 +162,6 @@
                     <p>打不烂、炸不断的生命线</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：孙志强</span>
-                      <span class="meta-item">👁️ 1.9万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -183,7 +176,6 @@
                     <p>战火中的白衣天使</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：周小燕</span>
-                      <span class="meta-item">👁️ 1.6万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -198,7 +190,6 @@
                     <p>那些永垂不朽的革命烈士</p>
                     <div class="course-meta">
                       <span class="meta-item">👤 老战士：陈光荣</span>
-                      <span class="meta-item">👁️ 5.2万次观看</span>
                     </div>
                   </div>
                 </div>
@@ -249,17 +240,16 @@
         };
       }
 
-      // 视频播放器控制
+      // 视频元素
       var video = document.getElementById('courseVideo');
-      var videoTitleBar = document.getElementById('videoTitleBar');
       var currentVideoTitle = document.getElementById('currentVideoTitle');
       var playBtn = document.getElementById('playBtn');
       var pauseBtn = document.getElementById('pauseBtn');
       var volumeBtn = document.getElementById('volumeBtn');
       var volumeIcon = document.getElementById('volume-icon');
 
-      // 点击课程项播放视频
-      var courseItems = document.querySelectorAll('.course-item.has-video');
+      // 课程项点击
+      var courseItems = document.querySelectorAll('.course-item[data-video-src]');
       courseItems.forEach(function(item) {
         item.onclick = function() {
           var videoSrc = this.getAttribute('data-video-src');
@@ -267,13 +257,10 @@
           
           if (videoSrc) {
             video.src = videoSrc;
-            video.poster = '';
-            currentVideoTitle.textContent = videoTitle || '正在播放';
-            videoTitleBar.style.display = 'flex';
-            video.play().catch(function(err) {
-              console.log('播放失败:', err);
-              alert('视频播放失败，请检查视频文件是否存在');
-            });
+            video.play();
+            if (currentVideoTitle) {
+              currentVideoTitle.textContent = videoTitle || '正在播放';
+            }
           }
         };
       });
@@ -281,7 +268,7 @@
       // 播放按钮
       if (playBtn) {
         playBtn.onclick = function() {
-          if (video.src) {
+          if (video) {
             video.play();
           }
         };
@@ -290,30 +277,37 @@
       // 暂停按钮
       if (pauseBtn) {
         pauseBtn.onclick = function() {
-          video.pause();
+          if (video) {
+            video.pause();
+          }
         };
       }
 
       // 音量按钮
       if (volumeBtn) {
         volumeBtn.onclick = function() {
-          if (video.muted) {
-            video.muted = false;
-            volumeIcon.textContent = '🔊';
-          } else {
-            video.muted = true;
-            volumeIcon.textContent = '🔇';
+          if (video) {
+            if (video.muted) {
+              video.muted = false;
+              if (volumeIcon) volumeIcon.textContent = '🔊';
+            } else {
+              video.muted = true;
+              if (volumeIcon) volumeIcon.textContent = '🔇';
+            }
           }
         };
       }
 
-      // 视频结束事件
+      // 视频结束
       if (video) {
         video.onended = function() {
-          var items = document.querySelectorAll('.course-item.has-video');
-          items.forEach(function(item) {
-            item.classList.remove('playing');
-          });
+          if (currentVideoTitle) {
+            currentVideoTitle.textContent = '播放结束';
+          }
+          var activeItem = document.querySelector('.course-item.active');
+          if (activeItem) {
+            activeItem.classList.remove('active');
+          }
         };
       }
     </script>
