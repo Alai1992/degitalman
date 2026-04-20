@@ -1,7 +1,7 @@
 // ABOUTME: Vite integration for Express server
 // ABOUTME: Handles dev middleware and production static file serving
 
-import type { Application, Request, Response, NextFunction } from 'express';
+import type { Application, Request, Response } from 'express';
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
@@ -22,17 +22,8 @@ export async function setupViteMiddleware(app: Application) {
     },
     appType: 'spa',
   });
-  
-  // 阻止API请求被Vite处理 - 在Vite中间件之前添加检查
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    if (req.url.startsWith('/api/')) {
-      // API请求应该已经被Express处理，这里确保不会再次处理
-      return next();
-    }
-    next();
-  });
-  
-  // Vite middleware 处理前端资源（非API请求）
+
+  // 使用 Vite middleware
   app.use(vite.middlewares);
 
   console.log('🚀 Vite dev server initialized');
@@ -53,6 +44,10 @@ export function setupStaticServer(app: Application) {
   app.use(express.static(distPath));
 
   // 2. SPA fallback - 所有未处理的请求返回 index.html
+  // 到达这里的请求说明：
+  //   - 不是 API 请求（已被前面注册的路由处理）
+  //   - 不是静态文件（express.static 未找到对应文件）
+  //   - 需要返回 index.html 让前端路由处理
   app.use((_req: Request, res: Response) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });

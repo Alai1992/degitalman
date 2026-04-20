@@ -14,7 +14,6 @@
     "@aws-sdk/client-s3": "^3.1032.0",
     "@aws-sdk/s3-request-presigner": "^3.1032.0",
     "@supabase/supabase-js": "2.95.3",
-    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^4.21.2"
   },
@@ -28,7 +27,6 @@
     "only-allow": "^1.2.2",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
-    "ts-node": "^10.9.2",
     "tsup": "^8.3.5",
     "tsx": "^4.19.2",
     "typescript": "^5.6.0",
