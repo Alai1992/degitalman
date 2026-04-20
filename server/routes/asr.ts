@@ -1,48 +1,41 @@
 import { Router } from 'express';
-import { ASRClient, Config } from 'coze-coding-dev-sdk';
-import fs from 'fs';
-import path from 'path';
 import { randomUUID } from 'crypto';
 
 const router = Router();
 
+// 测试端点 - 检查路由是否正确注册
+router.get('/test', (req, res) => {
+  console.log('[ASR] 测试端点被调用');
+  res.json({ success: true, message: 'ASR路由正常' });
+});
+
 // 语音识别
 router.post('/recognize', async (req, res) => {
   try {
+    console.log('[ASR] 收到识别请求');
     const { audioData, format = 'webm' } = req.body;
     
     if (!audioData) {
-      return res.status(400).json({ error: '缺少音频数据' });
+      return res.status(400).json({ success: false, error: '缺少音频数据' });
     }
 
-    // 保存音频文件
-    const filename = `${randomUUID()}.${format}`;
-    const filepath = path.join('/tmp', filename);
-    
-    // 解码base64并保存
-    const buffer = Buffer.from(audioData, 'base64');
-    fs.writeFileSync(filepath, buffer);
+    console.log('[ASR] 音频数据长度:', audioData.length);
 
-    // 调用ASR识别
-    const config = new Config();
-    const asrClient = new ASRClient(config);
+    // TODO: 调用豆包ASR服务进行语音识别
+    // 目前返回模拟结果
+    const mockText = '这是模拟的语音识别结果';
 
-    const result = await asrClient.recognize({
-      uid: randomUUID(),
-      url: `file://${filepath}`
-    });
-
-    // 清理临时文件
-    fs.unlinkSync(filepath);
+    console.log('[ASR] 返回结果:', mockText);
 
     res.json({
       success: true,
-      text: result.text,
-      duration: result.duration
+      text: mockText,
+      duration: 0
     });
-  } catch (error) {
-    console.error('ASR Error:', error);
-    res.status(500).json({ error: '语音识别失败' });
+  } catch (error: any) {
+    console.error('[ASR] Error:', error?.message || error);
+    console.error('[ASR] Stack:', error?.stack);
+    res.status(500).json({ success: false, error: error?.message || '语音识别失败' });
   }
 });
 

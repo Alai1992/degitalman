@@ -34,7 +34,7 @@ interface Message {
 
 const conversationHistories: Map<string, Message[]> = new Map();
 
-router.post('/api/chat', async (req: Request, res: Response) => {
+router.post('/chat', async (req: Request, res: Response) => {
   const { messages, userMessage } = req.body;
   
   // 获取或创建对话历史
