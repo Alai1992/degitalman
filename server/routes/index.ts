@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import chatRouter from './chat';
-import asrRouter from './asr';
 
 const router = Router();
 
@@ -32,8 +31,5 @@ router.get('/api/health', (req, res) => {
 
 // 聊天接口
 router.use(chatRouter);
-
-// 语音识别接口
-router.use(asrRouter);
 
 export default router;
