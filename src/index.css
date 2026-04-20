@@ -264,7 +264,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 3.5rem;
   min-height: 420px;
   padding: 1.5rem 0;
 }
