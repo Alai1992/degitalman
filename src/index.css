@@ -163,11 +163,11 @@ body {
 }
 
 .intro-icon {
-  font-size: 1.2rem;
+  font-size: 1.6rem;
 }
 
 .intro-header h2 {
-  font-size: 0.95rem;
+  font-size: 1.4rem;
   color: var(--gold);
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -183,8 +183,8 @@ body {
 }
 
 .intro-content p {
-  font-size: 0.82rem;
-  line-height: 1.7;
+  font-size: 1.1rem;
+  line-height: 1.9;
   color: var(--text-light);
   text-align: justify;
   text-indent: 2em;
@@ -229,22 +229,22 @@ body {
 }
 
 .sign-icon {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   flex-shrink: 0;
 }
 
 .significance-list strong {
   display: block;
-  font-size: 0.8rem;
+  font-size: 1.1rem;
   color: var(--text-cream);
-  margin-bottom: 0.1rem;
+  margin-bottom: 0.15rem;
 }
 
 .significance-list p {
-  font-size: 0.65rem;
+  font-size: 0.95rem;
   color: var(--text-light);
   opacity: 0.85;
-  line-height: 1.3;
+  line-height: 1.5;
   text-indent: 0;
   margin-bottom: 0;
 }
@@ -252,7 +252,7 @@ body {
 /* 底部模块区域 - 400px正方形按钮 */
 .footer-modules {
   flex-shrink: 0;
-  padding: 0.8rem 0 1rem;
+  padding: 0.5rem 0 0.8rem;
 }
 
 .modules-container {
