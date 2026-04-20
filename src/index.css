@@ -259,7 +259,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1.5rem;
+  gap: 3rem;
   min-height: 420px;
   padding: 1.5rem 0;
 }
