@@ -1,10 +1,7 @@
 import { Router } from 'express';
-import { ASRClient, Config } from 'coze-coding-dev-sdk';
+import { ASRClient, Config, HeaderUtils } from 'coze-coding-dev-sdk';
 
 const router = Router();
-
-// 创建ASR客户端
-const client = new ASRClient(new Config(), {});
 
 // 语音识别接口
 router.post('/recognize', async (req, res) => {
@@ -17,6 +14,12 @@ router.post('/recognize', async (req, res) => {
     }
 
     console.log(`[ASR] 收到语音识别请求，格式: ${format}`);
+
+    // 提取请求头并转发到SDK（关键步骤！）
+    const customHeaders = HeaderUtils.extractForwardHeaders(req.headers as Record<string, string>);
+    
+    const config = new Config();
+    const client = new ASRClient(config, customHeaders);
 
     const result = await client.recognize({
       uid: `user_${Date.now()}`,
