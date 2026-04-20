@@ -225,12 +225,7 @@ body {
   background: rgba(139, 0, 0, 0.2);
   border-radius: 6px;
   border-left: 3px solid var(--gold);
-  transition: all 0.3s ease;
-}
-
-.significance-list li:hover {
-  background: rgba(139, 0, 0, 0.35);
-  transform: translateX(4px);
+  cursor: default;
 }
 
 .sign-icon {
