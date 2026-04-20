@@ -53,6 +53,10 @@
                     <div class="message-text">
                       孩子，有什么想了解的，尽管问吧。
                     </div>
+                    <div class="message-audio" style="display:none;">
+                      <audio class="message-audio-player"></audio>
+                      <button class="audio-play-btn" title="播放语音">▶</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -92,6 +96,48 @@
 
     <script>
       window.onload = function() {
+        var currentAudio = null;
+        var currentAudioBtn = null;
+
+        // 播放/暂停语音
+        function toggleAudio(audio, btn) {
+          if (currentAudio && currentAudio !== audio) {
+            currentAudio.pause();
+            if (currentAudioBtn) currentAudioBtn.textContent = '▶';
+          }
+          
+          if (audio.paused) {
+            audio.play();
+            btn.textContent = '⏸';
+            currentAudio = audio;
+            currentAudioBtn = btn;
+          } else {
+            audio.pause();
+            btn.textContent = '▶';
+            currentAudio = null;
+            currentAudioBtn = null;
+          }
+        }
+
+        // 初始化音频按钮点击事件
+        document.querySelectorAll('.audio-play-btn').forEach(function(btn) {
+          btn.onclick = function() {
+            var audioContainer = this.parentElement;
+            var audio = audioContainer.querySelector('.message-audio-player');
+            toggleAudio(audio, this);
+          };
+        });
+
+        // 音频播放结束
+        document.querySelectorAll('.message-audio-player').forEach(function(audio) {
+          audio.onended = function() {
+            var btn = this.parentElement.querySelector('.audio-play-btn');
+            if (btn) btn.textContent = '▶';
+            currentAudio = null;
+            currentAudioBtn = null;
+          };
+        });
+
         // 返回按钮
         var backBtn = document.getElementById('backBtn');
         if (backBtn) {
@@ -104,6 +150,27 @@
         var chatInput = document.getElementById('chatInput');
         var sendBtn = document.getElementById('sendBtn');
         var chatMessages = document.getElementById('chatMessages');
+
+        // 生成TTS语音
+        function generateTTS(text, callback) {
+          fetch('/api/tts/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+          })
+          .then(function(response) {
+            if (!response.ok) throw new Error('TTS失败');
+            return response.blob();
+          })
+          .then(function(blob) {
+            var audioUrl = URL.createObjectURL(blob);
+            callback(audioUrl);
+          })
+          .catch(function(err) {
+            console.error('TTS error:', err);
+            callback(null);
+          });
+        }
 
         function sendMessage() {
           var question = chatInput.value.trim();
@@ -144,19 +211,51 @@
             chatMessages.removeChild(loadingDiv);
             var botDiv = document.createElement('div');
             botDiv.className = 'message bot-message';
-            botDiv.innerHTML = '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div><div class="message-content"><div class="message-text"></div></div>';
+            botDiv.innerHTML = '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div><div class="message-content"><div class="message-text"></div><div class="message-audio"><audio class="message-audio-player"></audio><button class="audio-play-btn" title="播放语音">▶</button></div></div>';
             chatMessages.appendChild(botDiv);
+            
             var targetDiv = botDiv.querySelector('.message-text');
+            var audioEl = botDiv.querySelector('.message-audio-player');
+            var audioBtn = botDiv.querySelector('.audio-play-btn');
+            var fullText = text;
             var i = 0;
+            
+            // 打字机效果
             function typeWriter() {
               if (i < text.length) {
                 targetDiv.textContent += text.charAt(i);
                 i++;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 setTimeout(typeWriter, 50);
+              } else {
+                // 打字完成，生成TTS
+                audioBtn.style.display = 'inline-block';
+                generateTTS(fullText, function(audioUrl) {
+                  if (audioUrl) {
+                    audioEl.src = audioUrl;
+                    // 自动播放
+                    audioEl.play().then(function() {
+                      audioBtn.textContent = '⏸';
+                      currentAudio = audioEl;
+                      currentAudioBtn = audioBtn;
+                    }).catch(function(e) {
+                      console.log('Auto-play blocked:', e);
+                    });
+                  }
+                });
               }
             }
             typeWriter();
+            
+            // 绑定音频按钮
+            audioBtn.onclick = function() {
+              toggleAudio(audioEl, audioBtn);
+            };
+            audioEl.onended = function() {
+              audioBtn.textContent = '▶';
+              currentAudio = null;
+              currentAudioBtn = null;
+            };
           })
           .catch(function(err) {
             chatMessages.removeChild(loadingDiv);

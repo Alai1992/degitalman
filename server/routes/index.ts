@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import chatRouter from './chat';
+import ttsRouter from './tts';
 
 const router = Router();
 
@@ -31,5 +32,8 @@ router.get('/api/health', (req, res) => {
 
 // 聊天接口
 router.use(chatRouter);
+
+// TTS语音合成接口
+router.use(ttsRouter);
 
 export default router;

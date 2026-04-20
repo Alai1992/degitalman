@@ -418,6 +418,28 @@ body {
   }
 }
 
+/* 音频播放按钮 */
+.message-audio {
+  margin-top: 0.5rem;
+}
+
+.audio-play-btn {
+  display: none;
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(135deg, var(--war-red), #5c0000);
+  border: 1px solid var(--war-gold);
+  border-radius: 15px;
+  color: var(--war-gold);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.audio-play-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(218, 165, 32, 0.3);
+}
+
 @media (max-width: 480px) {
   .quick-buttons {
     grid-template-columns: 1fr;
