@@ -238,10 +238,24 @@
           });
         }
         
+        // 停止当前播放的语音
+        function stopCurrentAudio() {
+          if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            if (currentAudioBtn) {
+              currentAudioBtn.textContent = '▶';
+            }
+            currentAudio = null;
+            currentAudioBtn = null;
+          }
+        }
+        
         // 播放/暂停语音
         function toggleAudio(audio, btn) {
           if (currentAudio && currentAudio !== audio) {
             currentAudio.pause();
+            currentAudio.currentTime = 0;
             if (currentAudioBtn) currentAudioBtn.textContent = '▶';
           }
           
@@ -261,6 +275,9 @@
         // 自动播放欢迎语语音
         function playWelcomeTTS() {
           if (!voiceEnabled || welcomeTTSGenerated) return;
+          
+          // 停止当前播放的音频
+          stopCurrentAudio();
           
           var welcomeText = '孩子，有什么想了解的，尽管问吧。';
           var firstMessage = document.querySelector('.bot-message');
@@ -404,7 +421,8 @@
                   ttsAudio.playbackRate = 1.0; // 正常语速
                   
                   if (ttsReady) {
-                    // 打字已完成，直接播放
+                    // 打字已完成，停止当前音频后播放
+                    stopCurrentAudio();
                     audioEl.src = audioUrl;
                     audioEl.play().then(function() {
                       audioBtn.textContent = '⏸';
@@ -436,7 +454,8 @@
                 ttsReady = true;
                 
                 if (voiceEnabled && audioEl.src) {
-                  // TTS已准备好，直接播放
+                  // TTS已准备好，停止当前音频后播放
+                  stopCurrentAudio();
                   audioEl.play().then(function() {
                     audioBtn.textContent = '⏸';
                     currentAudio = audioEl;
