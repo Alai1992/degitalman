@@ -26,27 +26,15 @@
         
         <!-- 内容区域 -->
         <div class="page-content">
-          <!-- 左侧老兵照片 -->
+          <!-- 左侧老兵半身照片 -->
           <div class="veteran-portrait">
             <div class="portrait-frame">
               <img src="/veteran-avatar.jpg" alt="老兵" class="portrait-img">
             </div>
-            <div class="portrait-name">杨德清</div>
-            <div class="portrait-info">92岁 · 抗美援朝老兵</div>
           </div>
 
           <!-- 右侧对话区域 -->
           <div class="chat-wrapper">
-            <!-- 页面标题 -->
-            <header class="page-header">
-              <div class="header-badge">
-                <span class="badge-icon">🔍</span>
-                互动探究
-              </div>
-              <h1 class="page-title">与历史对话</h1>
-              <p class="page-subtitle">探索抗美援朝历史的点点滴滴</p>
-            </header>
-
             <!-- 聊天区域 -->
             <div class="chat-container">
               <!-- 聊天消息区域 -->
@@ -56,7 +44,7 @@
                   <div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div>
                   <div class="message-content">
                     <div class="message-text">
-                      您好，我是经历过那场战争的老兵。有什么想了解的，尽管问吧。
+                      孩子，有什么想了解的，尽管问吧。
                     </div>
                   </div>
                 </div>
@@ -90,6 +78,12 @@
                 <button class="quick-btn" data-question="上甘岭战役有多激烈">上甘岭战役有多激烈</button>
                 <button class="quick-btn" data-question="志愿军战士的日常生活是怎样的">战士的日常生活</button>
                 <button class="quick-btn" data-question="为什么说上甘岭精神">上甘岭精神</button>
+                <button class="quick-btn" data-question="讲讲冰雕连的故事">冰雕连的故事</button>
+                <button class="quick-btn" data-question="当时后勤补给困难吗">后勤补给情况</button>
+                <button class="quick-btn" data-question="你最难忘的一场战斗是什么">最难忘的战斗</button>
+                <button class="quick-btn" data-question="战后回到家乡的生活是怎样的">战后生活</button>
+                <button class="quick-btn" data-question="抗美援朝战争的意义是什么">战争的意义</button>
+                <button class="quick-btn" data-question="你最想念的战友是谁">想念的战友</button>
               </div>
             </div>
           </div>
@@ -209,19 +203,29 @@
         botMsg.innerHTML = 
           '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div>' +
           '<div class="message-content">' +
-            '<div class="message-text"></div>' +
+            '<div class="message-text">' + escapeHtml(text) + '</div>' +
           '</div>';
         chatMessages.appendChild(botMsg);
-        return botMsg;
       }
 
-      // 流式获取响应
+      // 更新机器人消息
+      function updateBotMessage(messageId, text) {
+        var msgElement = document.getElementById(messageId);
+        if (msgElement) {
+          var textElement = msgElement.querySelector('.message-text');
+          if (textElement) {
+            textElement.innerHTML = escapeHtml(text);
+          }
+        }
+      }
+
+      // 流式输出响应
       async function streamResponse(message, messageId) {
         isStreaming = true;
         var sendBtn = document.getElementById('sendBtn');
         if (sendBtn) {
-          sendBtn.innerHTML = '<span class="loading-icon">⏳</span> 回复中';
           sendBtn.disabled = true;
+          sendBtn.innerHTML = '<span class="loading-icon">⟳</span> 回答中...';
         }
 
         try {
@@ -236,10 +240,12 @@
             })
           });
 
+          if (!response.ok) {
+            throw new Error('请求失败');
+          }
+
           var reader = response.body.getReader();
           var decoder = new TextDecoder();
-          var messageEl = document.getElementById(messageId);
-          var textEl = messageEl.querySelector('.message-text');
           var fullText = '';
 
           while (true) {
@@ -248,9 +254,7 @@
             
             var chunk = decoder.decode(result.value);
             fullText += chunk;
-            
-            // 更新消息内容，逐字显示效果
-            textEl.textContent = fullText;
+            updateBotMessage(messageId, fullText);
             scrollToBottom();
           }
 
@@ -261,14 +265,14 @@
           });
 
         } catch (error) {
-          console.error('请求失败:', error);
-          textEl.textContent = '抱歉，服务出现问题，请稍后再试。';
-        }
-
-        isStreaming = false;
-        if (sendBtn) {
-          sendBtn.innerHTML = '<span class="send-icon">➤</span> 发送';
-          sendBtn.disabled = false;
+          console.error('请求错误:', error);
+          updateBotMessage(messageId, '抱歉，服务出现问题，请稍后再试。');
+        } finally {
+          isStreaming = false;
+          if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.innerHTML = '<span class="send-icon">➤</span> 发送';
+          }
         }
       }
 
@@ -285,13 +289,6 @@
         var div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-      }
-
-      // 格式化时间
-      function formatTime(date) {
-        var hours = date.getHours().toString().padStart(2, '0');
-        var minutes = date.getMinutes().toString().padStart(2, '0');
-        return hours + ':' + minutes;
       }
     </script>
   </body>
