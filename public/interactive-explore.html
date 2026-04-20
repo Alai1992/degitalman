@@ -65,6 +65,9 @@
                   id="chatInput" 
                   placeholder="请输入您的问题..."
                 >
+                <button class="voice-button" id="voiceBtn" title="按住说话">
+                  <span class="voice-icon">🎤</span>
+                </button>
                 <button class="send-button" id="sendBtn">发送</button>
               </div>
             </div>
@@ -172,6 +175,85 @@
         if (chatInput) {
           chatInput.onkeypress = function(e) {
             if (e.key === 'Enter') sendMessage();
+          };
+        }
+
+        // 语音输入功能
+        var voiceBtn = document.getElementById('voiceBtn');
+        var mediaRecorder = null;
+        var audioChunks = [];
+
+        if (voiceBtn) {
+          // 获取麦克风权限并开始录音
+          voiceBtn.onmousedown = async function() {
+            try {
+              // 请求麦克风权限
+              var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+              mediaRecorder = new MediaRecorder(stream);
+              audioChunks = [];
+
+              mediaRecorder.ondataavailable = function(e) {
+                audioChunks.push(e.data);
+              };
+
+              mediaRecorder.onstop = async function() {
+                // 停止所有轨道
+                stream.getTracks().forEach(track => track.stop());
+
+                // 将音频转换为base64
+                var audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                var reader = new FileReader();
+                reader.onloadend = function() {
+                  var base64Data = reader.result.split(',')[1];
+
+                  // 调用语音识别API
+                  fetch('/api/asr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ audioData: base64Data })
+                  })
+                  .then(function(response) { return response.json(); })
+                  .then(function(data) {
+                    if (data.success && data.text) {
+                      chatInput.value = data.text;
+                      // 自动发送
+                      sendMessage();
+                    } else {
+                      alert('未能识别语音，请重试');
+                    }
+                  })
+                  .catch(function() {
+                    alert('语音识别失败，请重试');
+                  });
+                };
+                reader.readAsDataURL(audioBlob);
+              };
+
+              mediaRecorder.start();
+              voiceBtn.classList.add('recording');
+              voiceBtn.querySelector('.voice-icon').textContent = '🔴';
+            } catch (err) {
+              console.error('获取麦克风权限失败:', err);
+              alert('无法访问麦克风，请检查权限设置');
+            }
+          };
+
+          // 松开鼠标停止录音
+          voiceBtn.onmouseup = function() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+              mediaRecorder.stop();
+              voiceBtn.classList.remove('recording');
+              voiceBtn.querySelector('.voice-icon').textContent = '🎤';
+            }
+          };
+
+          // 鼠标离开时也停止录音
+          voiceBtn.onmouseleave = function() {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+              mediaRecorder.stop();
+              voiceBtn.classList.remove('recording');
+              voiceBtn.querySelector('.voice-icon').textContent = '🎤';
+            }
           };
         }
 
