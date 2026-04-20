@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五次战役作战图 - 历史地图</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%);
+      min-height: 100vh;
+      color: #e8d5b7;
+    }
+    
+    /* 战火背景 */
+    .war-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+      background: 
+        radial-gradient(ellipse at top, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(139, 69, 19, 0.3) 0%, transparent 50%);
+    }
+    
+    /* 页面头部 */
+    .page-header {
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.9), rgba(80, 20, 20, 0.95));
+      border-bottom: 2px solid #daa520;
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .back-button {
+      background: linear-gradient(135deg, #daa520, #b8860b);
+      border: none;
+      color: #1a0a0a;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(218, 165, 32, 0.4);
+    }
+    
+    .page-title {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .page-title h1 {
+      font-size: 1.8rem;
+      color: #daa520;
+      text-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+    }
+    
+    .page-title .subtitle {
+      font-size: 0.9rem;
+      color: #c9a86c;
+      margin-top: 0.3rem;
+    }
+    
+    .header-spacer {
+      width: 100px;
+    }
+    
+    /* 主内容区 */
+    .main-content {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    
+    /* 战役简介 */
+    .campaign-intro {
+      background: linear-gradient(135deg, rgba(45, 24, 16, 0.95), rgba(30, 15, 10, 0.98));
+      border: 2px solid #8b6914;
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    
+    .campaign-intro::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #8b6914, #daa520, #8b6914);
+    }
+    
+    .campaign-intro h2 {
+      color: #daa520;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    
+    .campaign-intro p {
+      color: #d4c4a8;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+    
+    /* 作战图 */
+    .map-container {
+      background: linear-gradient(135deg, rgba(45, 24, 16, 0.95), rgba(30, 15, 10, 0.98));
+      border: 2px solid #8b6914;
+      border-radius: 15px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .map-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #8b6914, #daa520, #8b6914);
+    }
+    
+    .map-image-container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      border: 3px solid #8b6914;
+    }
+    
+    .map-image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* 图例 */
+    .legend-box {
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #8b6914;
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    
+    .legend-box h3 {
+      color: #daa520;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+    }
+    
+    .legend-line {
+      width: 30px;
+      height: 4px;
+      border-radius: 2px;
+    }
+    
+    .legend-line.pva { background: #e74c3c; }
+    .legend-line.un { background: #3498db; }
+    .legend-line.38 { background: #f39c12; border-style: dashed; }
+    
+    /* 战役详情 */
+    .campaign-details {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .campaign-card {
+      background: rgba(45, 24, 16, 0.9);
+      border: 1px solid #8b6914;
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .campaign-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(139, 0, 0, 0.3);
+    }
+    
+    .campaign-card.first { border-left: 4px solid #e74c3c; }
+    .campaign-card.second { border-left: 4px solid #f39c12; }
+    .campaign-card.third { border-left: 4px solid #27ae60; }
+    .campaign-card.fourth { border-left: 4px solid #9b59b6; }
+    .campaign-card.fifth { border-left: 4px solid #1abc9c; }
+    
+    .campaign-card h3 {
+      color: #daa520;
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .campaign-card .date {
+      font-size: 0.85rem;
+      color: #c9a86c;
+      margin-bottom: 0.5rem;
+    }
+    
+    .campaign-card .desc {
+      color: #d4c4a8;
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    
+    .campaign-card .outcome {
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1px dashed #8b6914;
+    }
+    
+    .campaign-card .outcome strong {
+      color: #daa520;
+    }
+    
+    /* 关键战役 */
+    .key-battles {
+      margin-top: 2rem;
+      background: rgba(45, 24, 16, 0.9);
+      border: 1px solid #8b6914;
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    
+    .key-battles h3 {
+      color: #daa520;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px dashed #8b6914;
+    }
+    
+    .battles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .battle-item {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .battle-item .name {
+      color: #e74c3c;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    
+    .battle-item .time {
+      color: #c9a86c;
+      font-size: 0.85rem;
+    }
+    
+    /* 装饰元素 */
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border: 2px solid #daa520;
+      opacity: 0.3;
+    }
+    
+    .corner-decoration.top-left {
+      top: 10px;
+      left: 10px;
+      border-right: none;
+      border-bottom: none;
+    }
+    
+    .corner-decoration.top-right {
+      top: 10px;
+      right: 10px;
+      border-left: none;
+      border-bottom: none;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .page-title h1 {
+        font-size: 1.4rem;
+      }
+      
+      .main-content {
+        padding: 0 1rem;
+      }
+      
+      .campaign-details {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="war-background"></div>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <button class="back-button" onclick="goBack()">
+        <span>←</span>
+        <span>返回</span>
+      </button>
+      <div class="page-title">
+        <h1>⚔️ 五次战役作战图</h1>
+        <div class="subtitle">抗美援朝战争五次战役态势图</div>
+      </div>
+      <div class="header-spacer"></div>
+    </div>
+  </header>
+  
+  <main class="main-content">
+    <!-- 战役简介 -->
+    <div class="campaign-intro">
+      <h2>📜 战役概述</h2>
+      <p>
+        抗美援朝战争五次战役是1950年10月至1951年6月间，中国人民志愿军与朝鲜人民军共同对以美国为首的"联合国军"进行的五次大规模战役。这五次战役共歼敌22万余人，将"联合国军"从鸭绿江边打回到"三八线"，扭转了朝鲜战局，是抗美援朝战争的重要组成部分。
+      </p>
+    </div>
+    
+    <!-- 作战图 -->
+    <div class="map-container">
+      <div class="corner-decoration top-left"></div>
+      <div class="corner-decoration top-right"></div>
+      <div class="corner-decoration bottom-left"></div>
+      <div class="corner-decoration bottom-right"></div>
+      
+      <!-- 作战图 -->
+      <div class="map-image-container">
+        <img src="/images/korea-war-campaigns.jpg" alt="五次战役作战图" />
+      </div>
+      
+      <!-- 图例 -->
+      <div class="legend-box">
+        <h3>📋 图例说明</h3>
+        <div class="legend-items">
+          <div class="legend-item">
+            <div class="legend-line pva"></div>
+            <span>志愿军进攻路线</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line un"></div>
+            <span>联合国军进攻/撤退路线</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line 38" style="border: 2px dashed #f39c12;"></div>
+            <span>38度分界线</span>
+          </div>
+          <div class="legend-item">
+            <span style="color: #e74c3c;">●</span>
+            <span>志愿军</span>
+          </div>
+          <div class="legend-item">
+            <span style="color: #3498db;">●</span>
+            <span>联合国军</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 五次战役详情 -->
+      <div class="campaign-details">
+        <div class="campaign-card first">
+          <h3>🔴 第一次战役</h3>
+          <div class="date">1950年10月25日 - 11月5日</div>
+          <div class="desc">
+            志愿军入朝后首战，在云山地区重创美军骑兵第1师。同时在东线黄草岭阻击战中粉碎了"联合国军"的进攻。志愿军采取运动防御战略，初战告捷，稳定了朝鲜战局。
+          </div>
+          <div class="outcome">
+            <strong>结果：</strong>歼敌1.5万余人，将敌军从鸭绿江边打退到清川江以南
+          </div>
+        </div>
+        
+        <div class="campaign-card second">
+          <h3>🟠 第二次战役</h3>
+          <div class="date">1950年11月25日 - 12月24日</div>
+          <div class="desc">
+            志愿军发起全面反击。在西线收复平壤，在东线发动长津湖战役，重创美军第10军。志愿军以劣势装备战胜了装备精良的"联合国军"，创造了战争史上的奇迹。
+          </div>
+          <div class="outcome">
+            <strong>结果：</strong>歼敌3.6万余人，收复平壤，将敌军打退到三八线以南
+          </div>
+        </div>
+        
+        <div class="campaign-card third">
+          <h3>🟢 第三次战役</h3>
+          <div class="date">1950年12月31日 - 1951年1月8日</div>
+          <div class="desc">
+            志愿军和朝鲜人民军联合发起新年攻势，横扫临津江，突破联合国军防线，占领汉城（首尔）。这是志愿军首次占领敌方首都，展现了强大的战斗力。
+          </div>
+          <div class="outcome">
+            <strong>结果：</strong>歼敌1.9万余人，解放汉城，将敌军打退到水原附近
+          </div>
+        </div>
+        
+        <div class="campaign-card fourth">
+          <h3>🟣 第四次战役</h3>
+          <div class="date">1951年1月25日 - 4月21日</div>
+          <div class="desc">
+            "联合国军"发起大规模反攻。志愿军采取"西顶东放"战略，在汉江两岸顽强防御。砥平里战斗志愿军围攻未果，但整体防御作战成功阻滞了敌军进攻。
+          </div>
+          <div class="outcome">
+            <strong>结果：</strong>歼敌7.8万余人，志愿军主动后撤进行休整
+          </div>
+        </div>
+        
+        <div class="campaign-card fifth">
+          <h3>🔵 第五次战役</h3>
+          <div class="date">1951年4月22日 - 6月10日</div>
+          <div class="desc">
+            志愿军发起大规模春季攻势，在西线强渡临津江，包围联合国军。但在转移阶段志愿军180师遭受重大损失。战役结束后转入防御作战。
+          </div>
+          <div class="outcome">
+            <strong>结果：</strong>歼敌8.2万余人，将战线稳定在"三八线"附近
+          </div>
+        </div>
+      </div>
+      
+      <!-- 关键战役 -->
+      <div class="key-battles">
+        <h3>🎯 五次战役中的关键战斗</h3>
+        <div class="battles-grid">
+          <div class="battle-item">
+            <div class="name">云山战役</div>
+            <div class="time">第一次战役 · 1950年10月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">长津湖战役</div>
+            <div class="time">第二次战役 · 1950年11月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">突破临津江</div>
+            <div class="time">第三次战役 · 1950年12月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">汉江阻击战</div>
+            <div class="time">第四次战役 · 1951年1月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">砥平里战斗</div>
+            <div class="time">第四次战役 · 1951年2月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">铁原阻击战</div>
+            <div class="time">第五次战役 · 1951年5月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">华川阻击战</div>
+            <div class="time">第五次战役 · 1951年5月</div>
+          </div>
+          <div class="battle-item">
+            <div class="name">芝浦里阻击战</div>
+            <div class="time">第五次战役 · 1951年5月</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    function goBack() {
+      window.location.href = '/learning-support.html';
+    }
+  </script>
+</body>
+</html>
