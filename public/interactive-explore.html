@@ -21,18 +21,18 @@
           返回主页
         </button>
         
-        <!-- 内容区域 -->
-        <div class="page-content">
-          <!-- 页面标题 -->
-          <header class="page-header">
-            <div class="header-badge">
-              <span class="badge-icon">🔍</span>
-              互动探究
-            </div>
-            <h1 class="page-title">与老兵对话</h1>
-            <p class="page-subtitle">聆听老兵讲述峥嵘岁月</p>
-          </header>
-
+        <!-- 页面大标题 - 居中显示 -->
+        <header class="main-header">
+          <div class="main-title-badge">
+            <span class="badge-icon">🔍</span>
+            互动探究
+          </div>
+          <h1 class="main-title">与老兵对话</h1>
+          <p class="main-subtitle">聆听老兵讲述峥嵘岁月</p>
+        </header>
+        
+        <!-- 内容区域 - 照片和对话框 -->
+        <div class="content-section">
           <!-- 左侧老兵半身照片 -->
           <div class="veteran-portrait">
             <div class="portrait-frame">
@@ -59,21 +59,13 @@
 
               <!-- 输入区域 -->
               <div class="chat-input-area">
-                <div class="input-container">
-                  <textarea 
-                    class="chat-input" 
-                    id="chatInput" 
-                    placeholder="请输入您的问题..."
-                    rows="1"
-                  ></textarea>
-                  <button class="send-button" id="sendBtn">
-                    <span class="send-icon">➤</span>
-                    发送
-                  </button>
-                </div>
-                <div class="input-hint">
-                  提示：您可以询问关于战役、英雄、后勤、战略等各类问题
-                </div>
+                <input 
+                  type="text" 
+                  class="chat-input" 
+                  id="chatInput" 
+                  placeholder="请输入您的问题..."
+                >
+                <button class="send-button" id="sendBtn">发送</button>
               </div>
             </div>
 
@@ -81,16 +73,16 @@
             <div class="quick-questions">
               <div class="quick-title">试试这些问题</div>
               <div class="quick-buttons">
-                <button class="quick-btn" data-question="请讲讲长津湖战役的故事">长津湖战役的故事</button>
+                <button class="quick-btn" data-question="长津湖战役的故事">长津湖战役的故事</button>
                 <button class="quick-btn" data-question="上甘岭战役有多激烈">上甘岭战役有多激烈</button>
-                <button class="quick-btn" data-question="志愿军战士的日常生活是怎样的">战士的日常生活</button>
-                <button class="quick-btn" data-question="为什么说上甘岭精神">上甘岭精神</button>
-                <button class="quick-btn" data-question="讲讲冰雕连的故事">冰雕连的故事</button>
-                <button class="quick-btn" data-question="当时后勤补给困难吗">后勤补给情况</button>
-                <button class="quick-btn" data-question="你最难忘的一场战斗是什么">最难忘的战斗</button>
-                <button class="quick-btn" data-question="战后回到家乡的生活是怎样的">战后生活</button>
-                <button class="quick-btn" data-question="抗美援朝战争的意义是什么">战争的意义</button>
-                <button class="quick-btn" data-question="你最想念的战友是谁">想念的战友</button>
+                <button class="quick-btn" data-question="战士的日常生活">战士的日常生活</button>
+                <button class="quick-btn" data-question="上甘岭精神">上甘岭精神</button>
+                <button class="quick-btn" data-question="冰雕连的故事">冰雕连的故事</button>
+                <button class="quick-btn" data-question="后勤补给情况">后勤补给情况</button>
+                <button class="quick-btn" data-question="最难忘的战斗">最难忘的战斗</button>
+                <button class="quick-btn" data-question="战后生活">战后生活</button>
+                <button class="quick-btn" data-question="战争的意义">战争的意义</button>
+                <button class="quick-btn" data-question="想念的战友">想念的战友</button>
               </div>
             </div>
           </div>
@@ -99,15 +91,8 @@
     </div>
 
     <script>
-      // 全局变量
-      var isStreaming = false;
-      var conversationHistory = [];
-
-      // 页面加载完成后初始化
       window.onload = function() {
-        console.log('初始化互动探究页面...');
-        
-        // 返回主页
+        // 返回按钮
         var backBtn = document.getElementById('backBtn');
         if (backBtn) {
           backBtn.onclick = function() {
@@ -115,188 +100,89 @@
           };
         }
 
-        // 发送按钮
-        var sendBtn = document.getElementById('sendBtn');
+        // 发送消息
         var chatInput = document.getElementById('chatInput');
-        
-        if (sendBtn && chatInput) {
-          sendBtn.onclick = function() {
-            var message = chatInput.value.trim();
-            if (message) {
-              sendMessage(message);
-              chatInput.value = '';
-            }
-          };
+        var sendBtn = document.getElementById('sendBtn');
+        var chatMessages = document.getElementById('chatMessages');
 
-          // 回车发送
-          chatInput.onkeydown = function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              var message = chatInput.value.trim();
-              if (message) {
-                sendMessage(message);
-                chatInput.value = '';
+        function sendMessage() {
+          var question = chatInput.value.trim();
+          if (!question) return;
+
+          // 添加用户消息
+          var userDiv = document.createElement('div');
+          userDiv.className = 'message user-message';
+          userDiv.innerHTML = '<div class="message-avatar"><img src="/student-avatar.jpg" alt="" class="avatar-img"></div><div class="message-content"><div class="message-text">' + question + '</div></div>';
+          chatMessages.appendChild(userDiv);
+          chatInput.value = '';
+
+          // 滚动到底部
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          // 添加加载动画
+          var loadingDiv = document.createElement('div');
+          loadingDiv.className = 'message bot-message loading';
+          loadingDiv.innerHTML = '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div><div class="message-content"><div class="message-text">...</div></div>';
+          chatMessages.appendChild(loadingDiv);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          // 调用API
+          fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              messages: Array.from(chatMessages.querySelectorAll('.message')).map(function(m) {
+                return m.classList.contains('user-message') ? 
+                  { role: 'user', content: m.querySelector('.message-text').textContent } :
+                  { role: 'assistant', content: m.querySelector('.message-text').textContent };
+              }),
+              userMessage: question
+            })
+          })
+          .then(function(response) { return response.text(); })
+          .then(function(text) {
+            chatMessages.removeChild(loadingDiv);
+            var botDiv = document.createElement('div');
+            botDiv.className = 'message bot-message';
+            botDiv.innerHTML = '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div><div class="message-content"><div class="message-text"></div></div>';
+            chatMessages.appendChild(botDiv);
+            var targetDiv = botDiv.querySelector('.message-text');
+            var i = 0;
+            function typeWriter() {
+              if (i < text.length) {
+                targetDiv.textContent += text.charAt(i);
+                i++;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                setTimeout(typeWriter, 50);
               }
             }
-          };
+            typeWriter();
+          })
+          .catch(function(err) {
+            chatMessages.removeChild(loadingDiv);
+            var errDiv = document.createElement('div');
+            errDiv.className = 'message bot-message';
+            errDiv.innerHTML = '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div><div class="message-content"><div class="message-text">抱歉，网络出问题了，请稍后再试。</div></div>';
+            chatMessages.appendChild(errDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+        }
 
-          // 自动调整高度
-          chatInput.oninput = function() {
-            this.style.height = 'auto';
-            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        if (sendBtn) sendBtn.onclick = sendMessage;
+        if (chatInput) {
+          chatInput.onkeypress = function(e) {
+            if (e.key === 'Enter') sendMessage();
           };
         }
 
-        // 快捷问题
-        var quickBtns = document.querySelectorAll('.quick-btn');
-        quickBtns.forEach(function(btn) {
+        // 快捷问题点击
+        document.querySelectorAll('.quick-btn').forEach(function(btn) {
           btn.onclick = function() {
-            var question = this.getAttribute('data-question');
-            if (question) {
-              sendMessage(question);
-            }
+            chatInput.value = this.getAttribute('data-question');
+            sendMessage();
           };
         });
-
-        console.log('初始化完成');
       };
-
-      // 发送消息
-      function sendMessage(message) {
-        if (isStreaming) return;
-        
-        var chatMessages = document.getElementById('chatMessages');
-        if (!chatMessages) return;
-
-        // 添加用户消息
-        addUserMessage(message);
-        
-        // 添加空的消息气泡用于流式输出
-        var messageId = 'msg-' + Date.now();
-        addBotMessage('', messageId);
-        
-        // 滚动到底部
-        scrollToBottom();
-        
-        // 发送请求
-        streamResponse(message, messageId);
-      }
-
-      // 添加用户消息
-      function addUserMessage(text) {
-        var chatMessages = document.getElementById('chatMessages');
-        var userMsg = document.createElement('div');
-        userMsg.className = 'message user-message';
-        userMsg.innerHTML = 
-          '<div class="message-content">' +
-            '<div class="message-text">' + escapeHtml(text) + '</div>' +
-          '</div>' +
-          '<div class="message-avatar"><img src="/student-avatar.jpg" alt="" class="avatar-img"></div>';
-        chatMessages.appendChild(userMsg);
-        
-        // 保存对话历史
-        conversationHistory.push({
-          role: 'user',
-          content: text
-        });
-      }
-
-      // 添加机器人消息
-      function addBotMessage(text, messageId) {
-        var chatMessages = document.getElementById('chatMessages');
-        var botMsg = document.createElement('div');
-        botMsg.className = 'message bot-message';
-        botMsg.id = messageId;
-        botMsg.innerHTML = 
-          '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div>' +
-          '<div class="message-content">' +
-            '<div class="message-text">' + escapeHtml(text) + '</div>' +
-          '</div>';
-        chatMessages.appendChild(botMsg);
-      }
-
-      // 更新机器人消息
-      function updateBotMessage(messageId, text) {
-        var msgElement = document.getElementById(messageId);
-        if (msgElement) {
-          var textElement = msgElement.querySelector('.message-text');
-          if (textElement) {
-            textElement.innerHTML = escapeHtml(text);
-          }
-        }
-      }
-
-      // 流式输出响应
-      async function streamResponse(message, messageId) {
-        isStreaming = true;
-        var sendBtn = document.getElementById('sendBtn');
-        if (sendBtn) {
-          sendBtn.disabled = true;
-          sendBtn.innerHTML = '<span class="loading-icon">⟳</span> 回答中...';
-        }
-
-        try {
-          var response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              messages: conversationHistory,
-              userMessage: message
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('请求失败');
-          }
-
-          var reader = response.body.getReader();
-          var decoder = new TextDecoder();
-          var fullText = '';
-
-          while (true) {
-            var result = await reader.read();
-            if (result.done) break;
-            
-            var chunk = decoder.decode(result.value);
-            fullText += chunk;
-            updateBotMessage(messageId, fullText);
-            scrollToBottom();
-          }
-
-          // 保存对话历史
-          conversationHistory.push({
-            role: 'assistant',
-            content: fullText
-          });
-
-        } catch (error) {
-          console.error('请求错误:', error);
-          updateBotMessage(messageId, '抱歉，服务出现问题，请稍后再试。');
-        } finally {
-          isStreaming = false;
-          if (sendBtn) {
-            sendBtn.disabled = false;
-            sendBtn.innerHTML = '<span class="send-icon">➤</span> 发送';
-          }
-        }
-      }
-
-      // 滚动到底部
-      function scrollToBottom() {
-        var chatMessages = document.getElementById('chatMessages');
-        if (chatMessages) {
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-      }
-
-      // HTML转义
-      function escapeHtml(text) {
-        var div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-      }
     </script>
   </body>
 </html>
