@@ -249,30 +249,31 @@ body {
   margin-bottom: 0;
 }
 
-/* 底部模块区域 - 大号正方形按钮 */
+/* 底部模块区域 - 400px正方形按钮 */
 .footer-modules {
   flex-shrink: 0;
-  padding: 0.6rem 0;
+  padding: 0.8rem 0 1rem;
 }
 
 .modules-container {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  height: 180px;
+  align-items: center;
+  gap: 1.5rem;
+  height: 260px;
 }
 
 /* 正方形模块卡片 */
 .module-card.square-card {
-  width: 180px;
+  width: 260px;
   height: 100%;
-  border-radius: 14px;
+  border-radius: 18px;
   position: relative;
   overflow: visible;
 }
 
 .module-card.square-card:hover {
-  transform: translateY(-8px) scale(1.06);
+  transform: translateY(-10px) scale(1.05);
   z-index: 10;
 }
 
@@ -367,14 +368,14 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 0.8rem;
+  padding: 1rem;
 }
 
 .module-number {
   position: absolute;
-  top: 0.6rem;
-  right: 0.8rem;
-  font-size: 2.2rem;
+  top: 0.8rem;
+  right: 1rem;
+  font-size: 3rem;
   font-weight: 900;
   color: var(--gold);
   opacity: 0.45;
@@ -383,9 +384,9 @@ body {
 }
 
 .module-icon {
-  font-size: 2.8rem;
-  margin-bottom: 0.5rem;
-  filter: drop-shadow(0 0 8px rgba(218, 165, 32, 0.6));
+  font-size: 4rem;
+  margin-bottom: 0.6rem;
+  filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.6));
 }
 
 .module-text {
@@ -396,16 +397,16 @@ body {
 }
 
 .module-title {
-  font-size: 1.3rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--text-cream);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.3rem;
   transition: color 0.4s ease;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .module-desc {
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: var(--text-light);
   opacity: 0.9;
 }
@@ -494,24 +495,24 @@ body {
 /* 响应式调整 */
 @media (max-width: 1024px) {
   .modules-container {
-    height: 160px;
-    gap: 0.8rem;
+    height: 200px;
+    gap: 1rem;
   }
   
   .module-card.square-card {
-    width: 160px;
+    width: 200px;
   }
   
   .module-number {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   
   .module-icon {
-    font-size: 2.4rem;
+    font-size: 3.2rem;
   }
   
   .module-title {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
   }
 }
 
@@ -562,26 +563,26 @@ body {
   }
   
   .modules-container {
-    height: 130px;
+    height: 150px;
     gap: 0.6rem;
   }
   
   .module-card.square-card {
-    width: 130px;
+    width: 150px;
   }
   
   .module-number {
-    font-size: 1.8rem;
+    font-size: 2rem;
     top: 0.4rem;
     right: 0.5rem;
   }
   
   .module-icon {
-    font-size: 2rem;
+    font-size: 2.4rem;
   }
   
   .module-title {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
   
   .module-desc {
