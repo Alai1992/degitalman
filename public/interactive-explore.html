@@ -206,8 +206,13 @@
             var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
             audioChunks = [];
+            // 使用 ogg opus 格式（豆包ASR支持）
+            var oggFormat = 'audio/ogg;codecs=opus';
+            var useOgg = MediaRecorder.isTypeSupported(oggFormat);
+            var audioFormat = useOgg ? oggFormat : (MediaRecorder.isTypeSupported('audio/mp4') ? 'audio/mp4' : 'audio/webm');
+            
             mediaRecorder = new MediaRecorder(stream, {
-              mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4'
+              mimeType: audioFormat
             });
 
             mediaRecorder.ondataavailable = function(event) {
