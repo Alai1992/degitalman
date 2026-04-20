@@ -44,12 +44,14 @@
                 <video id="courseVideo" class="video-player" controls playsinline>
                   您的浏览器不支持视频播放
                 </video>
+                <!-- 视频封面图（无视频播放时显示） -->
+                <img id="videoCover" class="video-cover" src="/songgufeng-cover.jpg" alt="视频封面">
               </div>
               
               <!-- 视频标题栏 -->
               <div class="video-title-bar" id="videoTitleBar">
                 <span class="video-title-icon">🎬</span>
-                <span class="video-title-text" id="currentVideoTitle">选择课程开始播放</span>
+                <span class="video-title-text" id="currentVideoTitle">选择想听的故事</span>
               </div>
               
               <!-- 控制面板 -->
@@ -110,7 +112,7 @@
                   </div>
                 </div>
                 
-                <div class="course-item">
+                <div class="course-item has-video" data-video-src="/songgufeng.mp4" data-video-title="松骨峰战役回忆">
                   <div class="course-thumbnail">
                     <div class="thumbnail-placeholder">🛡️</div>
                     <div class="course-duration">18:42</div>
@@ -242,6 +244,7 @@
 
       // 视频元素
       var video = document.getElementById('courseVideo');
+      var videoCover = document.getElementById('videoCover');
       var currentVideoTitle = document.getElementById('currentVideoTitle');
       var playBtn = document.getElementById('playBtn');
       var pauseBtn = document.getElementById('pauseBtn');
@@ -258,6 +261,10 @@
           if (videoSrc) {
             video.src = videoSrc;
             video.play();
+            // 隐藏封面图
+            if (videoCover) {
+              videoCover.classList.add('hidden');
+            }
             if (currentVideoTitle) {
               currentVideoTitle.textContent = videoTitle || '正在播放';
             }
@@ -307,6 +314,10 @@
           var activeItem = document.querySelector('.course-item.active');
           if (activeItem) {
             activeItem.classList.remove('active');
+          }
+          // 显示封面图
+          if (videoCover) {
+            videoCover.classList.remove('hidden');
           }
         };
       }
