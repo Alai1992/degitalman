@@ -276,6 +276,7 @@
             if (audioUrl) {
               welcomeTTSGenerated = true;
               audioEl.src = audioUrl;
+              audioEl.playbackRate = 1.0; // 正常语速
               audioBtn.style.display = 'inline-block';
               
               audioEl.play().then(function() {
@@ -392,6 +393,36 @@
             var audioBtn = botDiv.querySelector('.audio-play-btn');
             var fullText = text;
             var i = 0;
+            var ttsReady = false;
+            var ttsAudio = null;
+            
+            // 立即开始生成TTS（在打字开始时就请求）
+            if (voiceEnabled) {
+              generateTTS(fullText, function(audioUrl) {
+                if (audioUrl) {
+                  ttsAudio = new Audio(audioUrl);
+                  ttsAudio.playbackRate = 1.0; // 正常语速
+                  
+                  if (ttsReady) {
+                    // 打字已完成，直接播放
+                    audioEl.src = audioUrl;
+                    audioEl.play().then(function() {
+                      audioBtn.textContent = '⏸';
+                      currentAudio = audioEl;
+                      currentAudioBtn = audioBtn;
+                    }).catch(function(e) {
+                      console.log('Auto-play blocked:', e);
+                    });
+                  } else {
+                    // 等待打字完成后再播放
+                    ttsReady = true;
+                  }
+                }
+              });
+            }
+            
+            // 显示播放按钮
+            audioBtn.style.display = 'inline-block';
             
             // 打字机效果
             function typeWriter() {
@@ -399,48 +430,43 @@
                 targetDiv.textContent += text.charAt(i);
                 i++;
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-                setTimeout(typeWriter, 50);
+                setTimeout(typeWriter, 30); // 打字速度加快
               } else {
-                // 打字完成，生成TTS
-                audioBtn.style.display = 'inline-block';
+                // 打字完成
+                ttsReady = true;
                 
-                if (voiceEnabled) {
-                  // 自动播放语音
-                  generateTTS(fullText, function(audioUrl) {
-                    if (audioUrl) {
-                      audioEl.src = audioUrl;
-                      audioEl.play().then(function() {
-                        audioBtn.textContent = '⏸';
-                        currentAudio = audioEl;
-                        currentAudioBtn = audioBtn;
-                      }).catch(function(e) {
-                        console.log('Auto-play blocked:', e);
-                      });
-                    }
+                if (voiceEnabled && audioEl.src) {
+                  // TTS已准备好，直接播放
+                  audioEl.play().then(function() {
+                    audioBtn.textContent = '⏸';
+                    currentAudio = audioEl;
+                    currentAudioBtn = audioBtn;
+                  }).catch(function(e) {
+                    console.log('Auto-play blocked:', e);
                   });
                 }
-                
-                // 绑定音频按钮
-                audioBtn.onclick = function() {
-                  if (!audioEl.src) {
-                    generateTTS(fullText, function(audioUrl) {
-                      if (audioUrl) {
-                        audioEl.src = audioUrl;
-                        toggleAudio(audioEl, audioBtn);
-                      }
-                    });
-                  } else {
-                    toggleAudio(audioEl, audioBtn);
-                  }
-                };
-                audioEl.onended = function() {
-                  audioBtn.textContent = '▶';
-                  currentAudio = null;
-                  currentAudioBtn = null;
-                };
               }
             }
             typeWriter();
+            
+            // 绑定音频按钮
+            audioBtn.onclick = function() {
+              if (!audioEl.src) {
+                generateTTS(fullText, function(audioUrl) {
+                  if (audioUrl) {
+                    audioEl.src = audioUrl;
+                    toggleAudio(audioEl, audioBtn);
+                  }
+                });
+              } else {
+                toggleAudio(audioEl, audioBtn);
+              }
+            };
+            audioEl.onended = function() {
+              audioBtn.textContent = '▶';
+              currentAudio = null;
+              currentAudioBtn = null;
+            };
           })
           .catch(function(err) {
             chatMessages.removeChild(loadingDiv);
