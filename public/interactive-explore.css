@@ -453,3 +453,39 @@ body {
     width: 100%;
   }
 }
+
+/* 语音输入按钮样式 */
+.voice-input-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.voice-input-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.voice-input-btn.recording {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.voice-input-btn svg {
+  width: 24px;
+  height: 24px;
+}
