@@ -65,6 +65,9 @@
                   id="chatInput" 
                   placeholder="请输入您的问题..."
                 >
+                <button class="voice-button" id="voiceBtn" title="按住说话">
+                  <span class="voice-icon">🎤</span>
+                </button>
                 <button class="send-button" id="sendBtn">发送</button>
               </div>
             </div>
@@ -173,6 +176,110 @@
           chatInput.onkeypress = function(e) {
             if (e.key === 'Enter') sendMessage();
           };
+        }
+
+        // 语音输入功能
+        var voiceBtn = document.getElementById('voiceBtn');
+        var mediaRecorder = null;
+        var audioChunks = [];
+        var isRecording = false;
+
+        if (voiceBtn) {
+          // 鼠标按下开始录音
+          voiceBtn.onmousedown = function(e) {
+            e.preventDefault();
+            startRecording();
+          };
+
+          // 鼠标松开停止录音并识别
+          voiceBtn.onmouseup = function(e) {
+            e.preventDefault();
+            stopRecording();
+          };
+
+          // 触摸事件支持
+          voiceBtn.ontouchstart = function(e) {
+            e.preventDefault();
+            startRecording();
+          };
+
+          voiceBtn.ontouchend = function(e) {
+            e.preventDefault();
+            stopRecording();
+          };
+
+          // 离开按钮区域也停止录音
+          voiceBtn.onmouseleave = function() {
+            if (isRecording) {
+              stopRecording();
+            }
+          };
+        }
+
+        function startRecording() {
+          if (isRecording) return;
+
+          navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function(stream) {
+              mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+              audioChunks = [];
+
+              mediaRecorder.ondataavailable = function(e) {
+                audioChunks.push(e.data);
+              };
+
+              mediaRecorder.onstop = function() {
+                var audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                stream.getTracks().forEach(function(track) { track.stop(); });
+                recognizeAudio(audioBlob);
+              };
+
+              mediaRecorder.start();
+              isRecording = true;
+              voiceBtn.classList.add('recording');
+            })
+            .catch(function(err) {
+              console.error('无法访问麦克风:', err);
+              alert('无法访问麦克风，请检查浏览器权限设置');
+            });
+        }
+
+        function stopRecording() {
+          if (!isRecording || !mediaRecorder) return;
+
+          mediaRecorder.stop();
+          isRecording = false;
+          voiceBtn.classList.remove('recording');
+        }
+
+        function recognizeAudio(audioBlob) {
+          var reader = new FileReader();
+          reader.onload = function() {
+            var base64Data = reader.result.split(',')[1];
+
+            fetch('/api/asr/recognize', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                audioData: base64Data,
+                format: 'webm'
+              })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+              if (data.success && data.text) {
+                chatInput.value = data.text;
+                sendMessage();
+              } else {
+                alert('未能识别语音，请重试');
+              }
+            })
+            .catch(function(err) {
+              console.error('语音识别失败:', err);
+              alert('语音识别失败，请重试');
+            });
+          };
+          reader.readAsDataURL(audioBlob);
         }
 
         // 快捷问题点击
