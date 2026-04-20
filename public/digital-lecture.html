@@ -36,31 +36,19 @@
             <p class="page-subtitle">通过数字人技术，重现老兵讲述的峥嵘岁月</p>
           </header>
 
-          <!-- 主内容区 -->
-          <div class="main-grid">
-            <!-- 左侧：视频/数字人展示区 -->
-            <div class="digital-avatar-section">
-              <div class="avatar-container">
-                <div class="avatar-frame">
-                  <!-- 视频播放器 -->
-                  <video id="courseVideo" class="course-video" controls>
-                    您的浏览器不支持视频播放
-                  </video>
-                  <!-- 数字人占位（无视频时显示） -->
-                  <div class="avatar-placeholder" id="avatarPlaceholder">
-                    <div class="avatar-icon">👤</div>
-                    <div class="avatar-name">老兵数字人</div>
-                  </div>
-                  <div class="avatar-glow"></div>
-                </div>
-                <div class="video-title-bar" id="videoTitleBar" style="display: none;">
+          <!-- 主内容区：视频在左下角，课程列表在右侧 -->
+          <div class="main-layout">
+            <!-- 左侧：视频播放区 -->
+            <div class="video-section">
+              <div class="video-container">
+                <!-- 视频播放器 -->
+                <video id="courseVideo" class="video-player" controls playsinline>
+                  您的浏览器不支持视频播放
+                </video>
+                <!-- 视频标题栏 -->
+                <div class="video-title-bar" id="videoTitleBar">
                   <span class="video-title-icon">🎬</span>
-                  <span class="video-title-text" id="currentVideoTitle">长津湖的冬天</span>
-                </div>
-              </div>
-                <div class="avatar-info">
-                  <h3>志愿军老战士</h3>
-                  <p>亲历抗美援朝战争</p>
+                  <span class="video-title-text" id="currentVideoTitle">选择课程开始播放</span>
                 </div>
               </div>
               
@@ -68,9 +56,9 @@
               <div class="control-panel">
                 <div class="control-title">播放控制</div>
                 <div class="control-buttons">
-                  <button class="control-btn play-btn" id="playBtn">
+                  <button class="control-btn" id="playBtn">
                     <span class="btn-icon">▶</span>
-                    <span class="btn-text">开始播放</span>
+                    <span class="btn-text">播放</span>
                   </button>
                   <button class="control-btn" id="pauseBtn">
                     <span class="btn-icon">⏸</span>
@@ -84,288 +72,167 @@
               </div>
             </div>
 
-            <!-- 右侧：课程内容 -->
+            <!-- 右侧：故事选择列表 -->
             <div class="course-section">
-              <!-- 课程分类 -->
-              <div class="course-tabs">
-                <button class="tab-btn active" data-tab="stories">老兵故事</button>
-                <button class="tab-btn" data-tab="history">战争综述</button>
-                <button class="tab-btn" data-tab="heroes">英雄事迹</button>
-                <button class="tab-btn" data-tab="knowledge">历史知识</button>
+              <div class="course-header">
+                <h2 class="course-header-title">
+                  <span class="header-icon">📖</span>
+                  老兵故事
+                </h2>
               </div>
-
+              
               <!-- 课程列表 -->
               <div class="course-list">
-                <!-- 老兵故事 -->
-                <div class="course-panel active" id="stories-panel">
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">🎖️</div>
-                      <div class="course-duration">12:35</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>一把炒面一把雪</h4>
-                      <p>讲述志愿军在朝鲜战场上的艰苦生活</p>
-                      <div class="course-meta">
-                        <span class="meta-item">👤 老战士：李明</span>
-                        <span class="meta-item">👁️ 1.2万次观看</span>
-                      </div>
-                    </div>
+                <div class="course-item has-video" data-video-src="/changjinhu.mp4" data-video-title="长津湖的冬天">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">❄️</div>
+                    <div class="course-duration">15:20</div>
                   </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">🛡️</div>
-                      <div class="course-duration">18:42</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>松骨峰战役回忆</h4>
-                      <p>幸存战士讲述那场惨烈的阻击战</p>
-                      <div class="course-meta">
-                        <span class="meta-item">👤 老战士：王建国</span>
-                        <span class="meta-item">👁️ 2.3万次观看</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="course-item has-video" data-video-src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E9%95%BF%E6%B4%A5%E6%B9%96%EF%BC%9A%E5%86%B0%E9%9B%AA%E8%BF%9E%E7%9A%84%E8%A1%80%E4%B8%8E%E7%81%AB+%281%29.mp4&nonce=a47f8603-3005-4266-b00f-23b848cd0625&project_id=7630315604347732022&sign=490b0bfaf79f362a08752dc111d89739f53c477910faebbfefe6e11d10b5b412" data-video-title="长津湖的冬天">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">❄️</div>
-                      <div class="course-duration">15:20</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>长津湖的冬天</h4>
-                      <p>极寒环境下的生死考验</p>
-                      <div class="course-meta">
-                        <span class="meta-item">👤 老战士：张志远</span>
-                        <span class="meta-item">👁️ 3.1万次观看</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">🏔️</div>
-                      <div class="course-duration">22:18</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>上甘岭的43天</h4>
-                      <p>钢铁阵地上的英雄赞歌</p>
-                      <div class="course-meta">
-                        <span class="meta-item">👤 老战士：刘德明</span>
-                        <span class="meta-item">👁️ 4.5万次观看</span>
-                      </div>
+                  <div class="course-info">
+                    <h4>长津湖的冬天</h4>
+                    <p>极寒环境下的生死考验</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：张志远</span>
+                      <span class="meta-item">👁️ 3.1万次观看</span>
                     </div>
                   </div>
                 </div>
-
-                <!-- 战争综述 -->
-                <div class="course-panel" id="history-panel">
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">📜</div>
-                      <div class="course-duration">25:00</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>抗美援朝战争背景</h4>
-                      <p>从朝鲜战争爆发到中国出兵</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📚 综述课程</span>
-                        <span class="meta-item">👁️ 5.6万次观看</span>
-                      </div>
-                    </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">🎖️</div>
+                    <div class="course-duration">12:35</div>
                   </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">⚔️</div>
-                      <div class="course-duration">35:42</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>五次战役详解</h4>
-                      <p>从运动战到阵地战的战略转变</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📚 综述课程</span>
-                        <span class="meta-item">👁️ 4.2万次观看</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">🤝</div>
-                      <div class="course-duration">20:15</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>中朝友谊与国际支援</h4>
-                      <p>社会主义阵营的团结与合作</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📚 综述课程</span>
-                        <span class="meta-item">👁️ 2.8万次观看</span>
-                      </div>
+                  <div class="course-info">
+                    <h4>一把炒面一把雪</h4>
+                    <p>讲述志愿军在朝鲜战场上的艰苦生活</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：李明</span>
+                      <span class="meta-item">👁️ 1.2万次观看</span>
                     </div>
                   </div>
                 </div>
-
-                <!-- 英雄事迹 -->
-                <div class="course-panel" id="heroes-panel">
-                  <div class="course-item">
-                    <div class="course-thumbnail hero-thumbnail">
-                      <div class="thumbnail-placeholder">⭐</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>杨根思：不朽的战斗英雄</h4>
-                      <p>抱起炸药包与敌人同归于尽</p>
-                      <div class="course-meta">
-                        <span class="meta-item">⭐ 特级英雄</span>
-                        <span class="meta-item">👁️ 6.7万次观看</span>
-                      </div>
-                    </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">🛡️</div>
+                    <div class="course-duration">18:42</div>
                   </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail hero-thumbnail">
-                      <div class="thumbnail-placeholder">🔥</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>邱少云：烈火中永生</h4>
-                      <p>为掩护潜伏部队壮烈牺牲</p>
-                      <div class="course-meta">
-                        <span class="meta-item">⭐ 一级英雄</span>
-                        <span class="meta-item">👁️ 7.2万次观看</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail hero-thumbnail">
-                      <div class="thumbnail-placeholder">💫</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>黄继光：舍身堵枪眼</h4>
-                      <p>用胸膛筑起胜利的桥梁</p>
-                      <div class="course-meta">
-                        <span class="meta-item">⭐ 特级英雄</span>
-                        <span class="meta-item">👁️ 8.9万次观看</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail hero-thumbnail">
-                      <div class="thumbnail-placeholder">🌟</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>罗盛教：国际主义战士</h4>
-                      <p>勇救落水朝鲜少年</p>
-                      <div class="course-meta">
-                        <span class="meta-item">⭐ 国际主义英雄</span>
-                        <span class="meta-item">👁️ 3.4万次观看</span>
-                      </div>
+                  <div class="course-info">
+                    <h4>松骨峰战役回忆</h4>
+                    <p>幸存战士讲述那场惨烈的阻击战</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：王建国</span>
+                      <span class="meta-item">👁️ 2.3万次观看</span>
                     </div>
                   </div>
                 </div>
-
-                <!-- 历史知识 -->
-                <div class="course-panel" id="knowledge-panel">
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">🏠</div>
-                      <div class="course-duration">10:30</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>坑道作战：地下长城</h4>
-                      <p>志愿军的伟大发明</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📖 军事知识</span>
-                        <span class="meta-item">👁️ 2.1万次观看</span>
-                      </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">🏔️</div>
+                    <div class="course-duration">22:18</div>
+                  </div>
+                  <div class="course-info">
+                    <h4>上甘岭的43天</h4>
+                    <p>钢铁阵地上的英雄赞歌</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：刘德明</span>
+                      <span class="meta-item">👁️ 4.5万次观看</span>
                     </div>
                   </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">✈️</div>
-                      <div class="course-duration">14:20</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>米格走廊：天空的较量</h4>
-                      <p>志愿军空军的崛起</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📖 军事知识</span>
-                        <span class="meta-item">👁️ 1.8万次观看</span>
-                      </div>
+                </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">🚁</div>
+                    <div class="course-duration">16:50</div>
+                  </div>
+                  <div class="course-info">
+                    <h4>空战英豪</h4>
+                    <p>志愿军空军的辉煌战绩</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：赵大海</span>
+                      <span class="meta-item">👁️ 2.8万次观看</span>
                     </div>
                   </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">🚂</div>
-                      <div class="course-duration">12:45</div>
-                    </div>
-                    <div class="course-info">
-                      <h4>钢铁运输线</h4>
-                      <p>打不烂、炸不断的生命线</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📖 后勤保障</span>
-                        <span class="meta-item">👁️ 2.5万次观看</span>
-                      </div>
+                </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">🚂</div>
+                    <div class="course-duration">14:30</div>
+                  </div>
+                  <div class="course-info">
+                    <h4>钢铁运输线</h4>
+                    <p>打不烂、炸不断的生命线</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：孙志强</span>
+                      <span class="meta-item">👁️ 1.9万次观看</span>
                     </div>
                   </div>
-                  
-                  <div class="course-item">
-                    <div class="course-thumbnail">
-                      <div class="thumbnail-placeholder">💊</div>
-                      <div class="course-duration">11:15</div>
+                </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">💊</div>
+                    <div class="course-duration">11:15</div>
+                  </div>
+                  <div class="course-info">
+                    <h4>卫生员的故事</h4>
+                    <p>战火中的白衣天使</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：周小燕</span>
+                      <span class="meta-item">👁️ 1.6万次观看</span>
                     </div>
-                    <div class="course-info">
-                      <h4>卫生员的故事</h4>
-                      <p>战火中的白衣天使</p>
-                      <div class="course-meta">
-                        <span class="meta-item">📖 战场救护</span>
-                        <span class="meta-item">👁️ 1.6万次观看</span>
-                      </div>
+                  </div>
+                </div>
+                
+                <div class="course-item">
+                  <div class="course-thumbnail">
+                    <div class="thumbnail-placeholder">⭐</div>
+                    <div class="course-duration">20:00</div>
+                  </div>
+                  <div class="course-info">
+                    <h4>英雄的最后时刻</h4>
+                    <p>那些永垂不朽的革命烈士</p>
+                    <div class="course-meta">
+                      <span class="meta-item">👤 老战士：陈光荣</span>
+                      <span class="meta-item">👁️ 5.2万次观看</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- 底部资源推荐 -->
-          <div class="resources-section">
-            <h2 class="section-title">
-              <span class="title-icon">📚</span>
-              扩展学习资源
-            </h2>
-            <div class="resources-grid">
-              <a href="https://www.kmycjng.com/list?cid=121" target="_blank" class="resource-card">
-                <div class="resource-icon">🏛️</div>
-                <div class="resource-info">
-                  <h3>抗美援朝纪念馆</h3>
-                  <p>官方展览与文物藏品</p>
-                </div>
-              </a>
-              <div class="resource-card">
-                <div class="resource-icon">📖</div>
-                <div class="resource-info">
-                  <h3>战史文献</h3>
-                  <p>珍贵的历史档案资料</p>
-                </div>
+        <!-- 底部资源推荐 -->
+        <div class="resources-section">
+          <h2 class="section-title">
+            <span class="title-icon">📚</span>
+            扩展学习资源
+          </h2>
+          <div class="resources-grid">
+            <a href="https://www.kmycjng.com/list?cid=121" target="_blank" class="resource-card">
+              <div class="resource-icon">🏛️</div>
+              <div class="resource-info">
+                <h3>抗美援朝纪念馆</h3>
+                <p>官方展览与文物藏品</p>
               </div>
-              <div class="resource-card">
-                <div class="resource-icon">🎬</div>
-                <div class="resource-info">
-                  <h3>纪录影像</h3>
-                  <p>珍贵的历史纪录片</p>
-                </div>
+            </a>
+            <div class="resource-card">
+              <div class="resource-icon">🎬</div>
+              <div class="resource-info">
+                <h3>纪录片资源</h3>
+                <p>珍贵影像资料</p>
               </div>
-              <div class="resource-card">
-                <div class="resource-icon">🎵</div>
-                <div class="resource-info">
-                  <h3>战争歌曲</h3>
-                  <p>那个年代的革命歌曲</p>
-                </div>
+            </div>
+            <div class="resource-card">
+              <div class="resource-icon">📚</div>
+              <div class="resource-info">
+                <h3>电子书籍</h3>
+                <p>抗美援朝相关著作</p>
               </div>
             </div>
           </div>
@@ -374,139 +241,81 @@
     </div>
 
     <script>
-      // 等待 DOM 加载完成后执行
-      window.onload = function() {
-        console.log('页面加载完成，开始初始化...');
-        
-        // 返回主页按钮
-        var backBtn = document.getElementById('backBtn');
-        if (backBtn) {
-          console.log('找到返回按钮，绑定点击事件');
-          backBtn.onclick = function() {
-            console.log('点击了返回按钮，准备跳转到主页');
-            window.location.href = '/';
-          };
-        } else {
-          console.error('未找到返回按钮');
-        }
-        
-        // 播放按钮
-        var playBtn = document.getElementById('playBtn');
-        if (playBtn) {
-          playBtn.onclick = function() {
-            var icon = playBtn.querySelector('.btn-icon');
-            var text = playBtn.querySelector('.btn-text');
-            if (icon) icon.textContent = '⏸';
-            if (text) text.textContent = '播放中';
-            playBtn.classList.add('playing');
-          };
-        }
-        
-        // 暂停按钮
-        var pauseBtn = document.getElementById('pauseBtn');
-        if (pauseBtn) {
-          pauseBtn.onclick = function() {
-            var playBtn = document.getElementById('playBtn');
-            var icon = playBtn.querySelector('.btn-icon');
-            var text = playBtn.querySelector('.btn-text');
-            if (playBtn.classList.contains('playing')) {
-              playBtn.classList.remove('playing');
-              if (icon) icon.textContent = '▶';
-              if (text) text.textContent = '开始播放';
-            } else {
-              playBtn.classList.add('playing');
-              if (icon) icon.textContent = '⏸';
-              if (text) text.textContent = '播放中';
-            }
-          };
-        }
-        
-        // 音量按钮
-        var volumeBtn = document.getElementById('volumeBtn');
-        var volumeIcon = document.getElementById('volume-icon');
-        var isMuted = false;
-        if (volumeBtn && volumeIcon) {
-          volumeBtn.onclick = function() {
-            isMuted = !isMuted;
-            volumeIcon.textContent = isMuted ? '🔇' : '🔊';
-          };
-        }
-        
-        // 标签页切换
-        var tabBtns = document.querySelectorAll('.tab-btn');
-        tabBtns.forEach(function(btn) {
-          btn.onclick = function() {
-            tabBtns.forEach(function(b) { b.classList.remove('active'); });
-            document.querySelectorAll('.course-panel').forEach(function(p) { p.classList.remove('active'); });
-            this.classList.add('active');
-            var tabId = this.getAttribute('data-tab');
-            var panel = document.getElementById(tabId + '-panel');
-            if (panel) panel.classList.add('active');
-          };
-        });
-        
-        // 课程项点击
-        var courseItems = document.querySelectorAll('.course-item');
-        var video = document.getElementById('courseVideo');
-        var avatarPlaceholder = document.getElementById('avatarPlaceholder');
-        var videoTitleBar = document.getElementById('videoTitleBar');
-        var currentVideoTitle = document.getElementById('currentVideoTitle');
+      // 返回按钮
+      var backBtn = document.getElementById('backBtn');
+      if (backBtn) {
+        backBtn.onclick = function() {
+          window.location.href = '/';
+        };
+      }
 
-        courseItems.forEach(function(item) {
-          item.onclick = function() {
-            // 检查是否有视频
-            var videoSrc = this.getAttribute('data-video-src');
-            var videoTitle = this.getAttribute('data-video-title');
+      // 视频播放器控制
+      var video = document.getElementById('courseVideo');
+      var videoTitleBar = document.getElementById('videoTitleBar');
+      var currentVideoTitle = document.getElementById('currentVideoTitle');
+      var playBtn = document.getElementById('playBtn');
+      var pauseBtn = document.getElementById('pauseBtn');
+      var volumeBtn = document.getElementById('volumeBtn');
+      var volumeIcon = document.getElementById('volume-icon');
 
-            if (videoSrc && video) {
-              // 如果有视频，播放视频
-              video.src = videoSrc;
-              video.play().catch(function(e) {
-                console.log('视频播放失败:', e);
-              });
+      // 点击课程项播放视频
+      var courseItems = document.querySelectorAll('.course-item.has-video');
+      courseItems.forEach(function(item) {
+        item.onclick = function() {
+          var videoSrc = this.getAttribute('data-video-src');
+          var videoTitle = this.getAttribute('data-video-title');
+          
+          if (videoSrc) {
+            video.src = videoSrc;
+            video.poster = '';
+            currentVideoTitle.textContent = videoTitle || '正在播放';
+            videoTitleBar.style.display = 'flex';
+            video.play().catch(function(err) {
+              console.log('播放失败:', err);
+              alert('视频播放失败，请检查视频文件是否存在');
+            });
+          }
+        };
+      });
 
-              // 隐藏数字人占位，显示视频
-              if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
-              if (videoTitleBar) {
-                videoTitleBar.style.display = 'flex';
-                if (currentVideoTitle) currentVideoTitle.textContent = videoTitle || '课程视频';
-              }
+      // 播放按钮
+      if (playBtn) {
+        playBtn.onclick = function() {
+          if (video.src) {
+            video.play();
+          }
+        };
+      }
 
-              // 更新播放按钮状态
-              var playBtn = document.getElementById('playBtn');
-              if (playBtn) {
-                playBtn.classList.add('playing');
-                var icon = playBtn.querySelector('.btn-icon');
-                var text = playBtn.querySelector('.btn-text');
-                if (icon) icon.textContent = '⏸';
-                if (text) text.textContent = '播放中';
-              }
-            } else {
-              // 没有视频，执行原有逻辑
-              var playBtn = document.getElementById('playBtn');
-              if (playBtn && !playBtn.classList.contains('playing')) {
-                playBtn.click();
-              }
-            }
-          };
-        });
+      // 暂停按钮
+      if (pauseBtn) {
+        pauseBtn.onclick = function() {
+          video.pause();
+        };
+      }
 
-        // 视频播放结束
-        if (video) {
-          video.addEventListener('ended', function() {
-            var playBtn = document.getElementById('playBtn');
-            if (playBtn) {
-              playBtn.classList.remove('playing');
-              var icon = playBtn.querySelector('.btn-icon');
-              var text = playBtn.querySelector('.btn-text');
-              if (icon) icon.textContent = '▶';
-              if (text) text.textContent = '开始播放';
-            }
+      // 音量按钮
+      if (volumeBtn) {
+        volumeBtn.onclick = function() {
+          if (video.muted) {
+            video.muted = false;
+            volumeIcon.textContent = '🔊';
+          } else {
+            video.muted = true;
+            volumeIcon.textContent = '🔇';
+          }
+        };
+      }
+
+      // 视频结束事件
+      if (video) {
+        video.onended = function() {
+          var items = document.querySelectorAll('.course-item.has-video');
+          items.forEach(function(item) {
+            item.classList.remove('playing');
           });
-        }
-
-        console.log('初始化完成');
-      };
+        };
+      }
     </script>
   </body>
 </html>
