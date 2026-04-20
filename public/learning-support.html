@@ -403,17 +403,17 @@
                   </div>
                   <button class="item-btn play-btn" id="songPlayBtn" data-playing="false">▶ 播放</button>
                 </div>
-                <div class="resource-item">
+                <div class="resource-item" id="hero-song-item">
                   <div class="item-icon">🎹</div>
                   <div class="item-content">
                     <h3>《英雄的赞歌》</h3>
                     <p>歌颂志愿军战士的经典革命歌曲</p>
                     <div class="item-meta">
                       <span class="meta-tag">革命歌曲</span>
-                      <span class="meta-size">MP3 4.1MB</span>
+                      <span class="meta-size">MP3 9.5MB</span>
                     </div>
                   </div>
-                  <button class="item-btn">播放</button>
+                  <button class="item-btn play-btn" id="heroSongPlayBtn" data-playing="false">▶ 播放</button>
                 </div>
                 <div class="resource-item">
                   <div class="item-icon">🎸</div>
@@ -784,6 +784,63 @@
             songPlayBtn.textContent = '▶ 播放';
             songPlayBtn.classList.remove('playing');
             songPlayBtn.setAttribute('data-playing', 'false');
+            console.log('音频加载失败');
+          };
+        }
+        
+        // 英雄赞歌音频播放控制
+        var heroAudio = new Audio();
+        var heroSongPlayBtn = document.getElementById('heroSongPlayBtn');
+        
+        heroAudio.src = '/audio/hero-song.mp3';
+        heroAudio.loop = false;
+        
+        if (heroSongPlayBtn) {
+          heroSongPlayBtn.onclick = function() {
+            var isPlaying = heroSongPlayBtn.getAttribute('data-playing') === 'true';
+            
+            if (isPlaying) {
+              // 停止播放
+              heroAudio.pause();
+              heroAudio.currentTime = 0;
+              heroSongPlayBtn.textContent = '▶ 播放';
+              heroSongPlayBtn.classList.remove('playing');
+              heroSongPlayBtn.setAttribute('data-playing', 'false');
+            } else {
+              // 停止其他音频
+              if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
+                if (songPlayBtn) {
+                  songPlayBtn.textContent = '▶ 播放';
+                  songPlayBtn.classList.remove('playing');
+                  songPlayBtn.setAttribute('data-playing', 'false');
+                }
+              }
+              
+              // 开始播放英雄赞歌
+              heroAudio.play().catch(function(err) {
+                console.log('音频播放失败:', err);
+                alert('音频加载中，请稍后再试...');
+              });
+              heroSongPlayBtn.textContent = '■ 停止';
+              heroSongPlayBtn.classList.add('playing');
+              heroSongPlayBtn.setAttribute('data-playing', 'true');
+            }
+          };
+          
+          // 播放结束后的回调
+          heroAudio.onended = function() {
+            heroSongPlayBtn.textContent = '▶ 播放';
+            heroSongPlayBtn.classList.remove('playing');
+            heroSongPlayBtn.setAttribute('data-playing', 'false');
+          };
+          
+          // 播放出错处理
+          heroAudio.onerror = function() {
+            heroSongPlayBtn.textContent = '▶ 播放';
+            heroSongPlayBtn.classList.remove('playing');
+            heroSongPlayBtn.setAttribute('data-playing', 'false');
             console.log('音频加载失败');
           };
         }
