@@ -264,7 +264,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3.5rem;
+  gap: 4.5rem;
   min-height: 420px;
   padding: 1.5rem 0;
 }
@@ -279,7 +279,7 @@ body {
 }
 
 .module-card.square-card:hover {
-  transform: translateY(-10px) scale(1.05);
+  transform: translateY(-5px) scale(1.02);
   z-index: 10;
 }
 
