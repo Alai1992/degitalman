@@ -284,10 +284,12 @@
           
           voiceInputBtn.addEventListener('mouseup', function(e) {
             e.preventDefault();
+            voiceInputBtn.classList.remove('recording');
             if (recognition && isRecording) recognition.stop();
           });
           
           voiceInputBtn.addEventListener('mouseleave', function() {
+            voiceInputBtn.classList.remove('recording');
             if (recognition && isRecording) recognition.stop();
           });
           
@@ -300,6 +302,7 @@
           
           voiceInputBtn.addEventListener('touchend', function(e) {
             e.preventDefault();
+            voiceInputBtn.classList.remove('recording');
             if (recognition && isRecording) recognition.stop();
           });
         }
