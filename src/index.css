@@ -314,7 +314,9 @@ body {
   background-position: center center;
   background-repeat: no-repeat;
   border-radius: 2.5rem;
+  overflow: hidden;
   transition: transform 0.5s ease;
+  z-index: 0;
 }
 
 .module-card:hover .card-background {
