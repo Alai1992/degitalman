@@ -323,49 +323,6 @@ body {
   box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
 }
 
-/* 语音输入按钮 */
-.voice-button {
-  padding: 0.8rem 1.2rem;
-  background: linear-gradient(135deg, #1a3a5c, #0d1f33);
-  border: 2px solid var(--war-gold);
-  border-radius: 25px;
-  color: var(--war-gold);
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.voice-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
-}
-
-.voice-button.recording {
-  background: linear-gradient(135deg, #c0392b, #8e0000);
-  animation: pulse 1s infinite;
-}
-
-.voice-button.recording .voice-icon {
-  animation: bounce 0.5s infinite;
-}
-
-.voice-icon {
-  font-size: 1.2rem;
-}
-
-@keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.7); }
-  50% { box-shadow: 0 0 0 10px rgba(192, 57, 43, 0); }
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-
 /* 快捷问题 */
 .quick-questions {
   background: var(--chat-bg);
