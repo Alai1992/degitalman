@@ -82,7 +82,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 0.8rem 2rem;
+  padding: 0.6rem 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
 }
@@ -90,34 +90,34 @@ body {
 /* 顶部固定标题 */
 .header {
   text-align: center;
-  padding: 0.2rem 0 0.6rem;
+  padding: 0.1rem 0 0.5rem;
   flex-shrink: 0;
   background: linear-gradient(180deg, rgba(26, 10, 10, 0.8) 0%, transparent 100%);
-  margin: -0.8rem -2rem 0.4rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 0.6rem;
+  margin: -0.6rem -1.5rem 0.3rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
 }
 
 .title-badge {
   display: inline-block;
   background: linear-gradient(135deg, var(--primary-red), var(--deep-red));
   color: var(--text-cream);
-  padding: 0.2rem 0.8rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 20px;
-  font-size: 0.65rem;
-  margin-bottom: 0.4rem;
+  font-size: 0.6rem;
+  margin-bottom: 0.3rem;
   border: 1px solid var(--gold);
-  box-shadow: 0 2px 8px rgba(139, 0, 0, 0.4);
+  box-shadow: 0 2px 6px rgba(139, 0, 0, 0.4);
 }
 
 .main-title {
-  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
   font-weight: 900;
   color: var(--gold);
   text-shadow: 
     2px 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 20px rgba(218, 165, 32, 0.4);
+    0 0 15px rgba(218, 165, 32, 0.4);
   line-height: 1.3;
 }
 
@@ -127,16 +127,16 @@ body {
 }
 
 .title-divider {
-  margin: 0 0.4rem;
+  margin: 0 0.3rem;
   opacity: 0.5;
 }
 
-/* 中间简介区域 - 自适应填满 */
+/* 中间简介区域 - 上下排列填满 */
 .intro-section {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   min-height: 0;
   overflow: hidden;
 }
@@ -145,8 +145,8 @@ body {
 .intro-card {
   background: rgba(26, 10, 10, 0.7);
   border: 1px solid rgba(218, 165, 32, 0.3);
-  border-radius: 12px;
-  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -155,19 +155,19 @@ body {
 .intro-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.6rem;
-  padding-bottom: 0.5rem;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1px dashed rgba(218, 165, 32, 0.3);
   flex-shrink: 0;
 }
 
 .intro-icon {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 .intro-header h2 {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--gold);
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -179,23 +179,19 @@ body {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 0.4rem;
 }
 
 .intro-content p {
-  font-size: 0.85rem;
-  line-height: 1.8;
+  font-size: 0.82rem;
+  line-height: 1.7;
   color: var(--text-light);
   text-align: justify;
   text-indent: 2em;
-  margin-bottom: 0.5rem;
-}
-
-.intro-content p:last-child {
-  margin-bottom: 0;
 }
 
 .intro-content::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 .intro-content::-webkit-scrollbar-track {
@@ -210,71 +206,73 @@ body {
 /* 意义列表 */
 .significance-list {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
   flex: 1;
 }
 
 .significance-list li {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0.5rem 0.6rem;
+  gap: 0.4rem;
+  padding: 0.4rem 0.5rem;
   background: rgba(139, 0, 0, 0.2);
-  border-radius: 8px;
+  border-radius: 6px;
   border-left: 3px solid var(--gold);
   transition: all 0.3s ease;
 }
 
 .significance-list li:hover {
   background: rgba(139, 0, 0, 0.35);
-  transform: translateX(5px);
+  transform: translateX(4px);
 }
 
 .sign-icon {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   flex-shrink: 0;
 }
 
 .significance-list strong {
   display: block;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-cream);
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.1rem;
 }
 
 .significance-list p {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-light);
   opacity: 0.85;
-  line-height: 1.4;
+  line-height: 1.3;
   text-indent: 0;
   margin-bottom: 0;
 }
 
-/* 底部模块区域 - 固定高度 */
+/* 底部模块区域 - 正方形按钮 */
 .footer-modules {
   flex-shrink: 0;
-  padding: 0.6rem 0 0.4rem;
+  padding: 0.5rem 0;
 }
 
 .modules-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  justify-content: center;
   gap: 0.8rem;
+  height: 140px;
 }
 
-/* 模块卡片 */
-.module-card.large-card {
-  height: 100px;
+/* 正方形模块卡片 */
+.module-card.square-card {
+  width: 140px;
+  height: 100%;
   border-radius: 12px;
   position: relative;
   overflow: visible;
 }
 
-.module-card.large-card:hover {
-  transform: translateY(-5px);
+.module-card.square-card:hover {
+  transform: translateY(-6px) scale(1.05);
   z-index: 10;
 }
 
@@ -290,8 +288,8 @@ body {
 
 .module-card:hover {
   box-shadow: 
-    0 12px 30px rgba(0, 0, 0, 0.6),
-    0 0 20px rgba(218, 165, 32, 0.4);
+    0 15px 35px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(218, 165, 32, 0.5);
 }
 
 .module-card:hover .card-border {
@@ -300,11 +298,6 @@ body {
 }
 
 .module-card:hover .module-title {
-  color: var(--gold);
-}
-
-.module-card:hover .arrow {
-  transform: translateX(6px);
   color: var(--gold);
 }
 
@@ -322,7 +315,7 @@ body {
 }
 
 .module-card:hover .card-background {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 /* 卡片遮罩 */
@@ -334,18 +327,18 @@ body {
   height: 100%;
   background: linear-gradient(
     135deg,
-    rgba(26, 10, 10, 0.9) 0%,
-    rgba(107, 15, 26, 0.8) 50%,
-    rgba(139, 0, 0, 0.7) 100%
+    rgba(26, 10, 10, 0.88) 0%,
+    rgba(107, 15, 26, 0.78) 50%,
+    rgba(139, 0, 0, 0.68) 100%
   );
 }
 
 .module-card:hover .card-overlay {
   background: linear-gradient(
     135deg,
-    rgba(26, 10, 10, 0.85) 0%,
-    rgba(107, 15, 26, 0.7) 50%,
-    rgba(139, 0, 0, 0.55) 100%
+    rgba(26, 10, 10, 0.82) 0%,
+    rgba(107, 15, 26, 0.68) 50%,
+    rgba(139, 0, 0, 0.5) 100%
   );
 }
 
@@ -374,23 +367,23 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 0.8rem;
+  padding: 0.6rem;
 }
 
 .module-number {
   position: absolute;
-  top: 0.4rem;
+  top: 0.5rem;
   right: 0.6rem;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   font-weight: 900;
   color: var(--gold);
-  opacity: 0.5;
+  opacity: 0.45;
   line-height: 1;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .module-icon {
-  font-size: 1.8rem;
+  font-size: 2rem;
   margin-bottom: 0.3rem;
   filter: drop-shadow(0 0 6px rgba(218, 165, 32, 0.6));
 }
@@ -403,38 +396,18 @@ body {
 }
 
 .module-title {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-cream);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
   transition: color 0.4s ease;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .module-desc {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-light);
   opacity: 0.9;
-}
-
-.module-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.3rem;
-  font-size: 0.8rem;
-  margin-top: 0.4rem;
-}
-
-.enter-text {
-  color: var(--text-light);
-  font-weight: 600;
-}
-
-.arrow {
-  color: var(--text-light);
-  font-size: 0.9rem;
-  transition: all 0.4s ease;
 }
 
 /* 装饰元素 */
@@ -520,85 +493,94 @@ body {
 
 /* 响应式调整 */
 @media (max-width: 1024px) {
-  .intro-section {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-  }
-  
   .modules-container {
+    height: 120px;
     gap: 0.6rem;
   }
   
-  .module-card.large-card {
-    height: 90px;
+  .module-card.square-card {
+    width: 120px;
+  }
+  
+  .module-number {
+    font-size: 1.5rem;
+  }
+  
+  .module-icon {
+    font-size: 1.7rem;
   }
 }
 
 @media (max-width: 768px) {
   .content-wrapper {
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
   }
   
   .header {
-    padding: 0.2rem 0 0.4rem;
-    margin: -0.5rem -1rem 0.3rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.4rem;
+    padding: 0.1rem 0 0.3rem;
+    margin: -0.4rem -0.8rem 0.2rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    padding-top: 0.3rem;
   }
   
   .main-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
   
   .intro-section {
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
   
   .intro-card {
-    padding: 0.7rem 0.8rem;
+    padding: 0.6rem 0.7rem;
   }
   
   .intro-header h2 {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
   
   .intro-content p {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+  
+  .significance-list {
+    grid-template-columns: 1fr;
   }
   
   .significance-list strong {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
   }
   
   .significance-list p {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
   }
   
   .modules-container {
-    grid-template-columns: 1fr;
+    height: 100px;
     gap: 0.5rem;
   }
   
-  .module-card.large-card {
-    height: 80px;
+  .module-card.square-card {
+    width: 100px;
   }
   
   .module-number {
     font-size: 1.3rem;
     top: 0.3rem;
-    right: 0.5rem;
+    right: 0.4rem;
   }
   
   .module-icon {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
   
   .module-title {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .module-desc {
-    font-size: 0.65rem;
+    font-size: 0.55rem;
   }
 }
