@@ -85,7 +85,7 @@
                   </div>
                   <button class="item-btn">查阅</button>
                 </div>
-                <div class="resource-item">
+                <div class="resource-item" data-link="/war-diary.html">
                   <div class="item-icon">📋</div>
                   <div class="item-content">
                     <h3>战地日记选编</h3>
@@ -729,6 +729,16 @@
             var panel = document.getElementById(category + '-panel');
             if (panel) panel.classList.add('active');
           };
+        });
+        
+        // 资源项点击跳转
+        var resourceItems = document.querySelectorAll('.resource-item[data-link]');
+        resourceItems.forEach(function(item) {
+          item.onclick = function() {
+            var link = this.getAttribute('data-link');
+            if (link) window.location.href = link;
+          };
+          item.style.cursor = 'pointer';
         });
         
         console.log('学习支持页面初始化完成');
