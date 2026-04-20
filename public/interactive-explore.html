@@ -238,7 +238,16 @@
           try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             audioChunks = [];
-            mediaRecorder = new MediaRecorder(stream);
+            // 优先使用 opus 格式，不支持则使用 webm/opus
+            let mimeType = 'audio/ogg;codecs=opus';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+              mimeType = 'audio/webm;codecs=opus';
+              if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = 'audio/webm';
+              }
+            }
+            console.log('[ASR] 使用音频格式:', mimeType);
+            mediaRecorder = new MediaRecorder(stream, { mimeType });
             
             mediaRecorder.ondataavailable = (event) => {
               audioChunks.push(event.data);
