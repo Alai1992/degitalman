@@ -259,7 +259,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 5rem;
   min-height: 420px;
   padding: 1.5rem 0;
 }
@@ -313,6 +313,7 @@ body {
   background-size: 100% 100%;
   background-position: center center;
   background-repeat: no-repeat;
+  border-radius: 1rem;
   transition: transform 0.5s ease;
 }
 
