@@ -296,7 +296,22 @@
               body: JSON.stringify({ audioData: base64Data, format: 'webm' })
             });
             
-            const data = await response.json();
+            // 检查响应状态
+            if (!response.ok) {
+              console.error('[ASR] 服务器错误:', response.status);
+              alert('语音识别服务暂时不可用，请使用键盘输入');
+              return;
+            }
+            
+            // 检查响应内容
+            const text = await response.text();
+            if (!text || !text.trim()) {
+              console.error('[ASR] 空响应');
+              alert('未识别到语音，请重试');
+              return;
+            }
+            
+            const data = JSON.parse(text);
             
             if (data.error) {
               console.error('[ASR] 识别失败:', data.error);
