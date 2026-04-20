@@ -213,23 +213,24 @@ body {
 }
 
 .message-avatar {
-  width: 48px;
-  height: 48px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 28px;
   flex-shrink: 0;
-  border: 2px solid var(--war-gold);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .bot-message .message-avatar {
-  background: linear-gradient(135deg, var(--war-red), #3d1010);
+  background: none;
 }
 
 .user-message .message-avatar {
-  background: linear-gradient(135deg, #4a3728, #2d1f15);
+  background: none;
 }
 
 .message-avatar .avatar-img {
@@ -427,9 +428,9 @@ body {
   }
 
   .message-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
+    width: 55px;
+    height: 55px;
+    font-size: 24px;
   }
 
   .send-button {
