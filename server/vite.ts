@@ -23,7 +23,54 @@ export async function setupViteMiddleware(app: Application) {
     appType: 'spa',
   });
 
-  // 使用 Vite middleware
+  // ASR 语音识别路由（直接内联，避免TS模块解析问题）
+  // 必须放在所有中间件之前，确保优先匹配
+  app.post('/api/asr/recognize', async (req: any, res: any) => {
+    try {
+      const { audioData, format } = req.body;
+      
+      if (!audioData) {
+        res.status(400).json({ error: 'Missing audioData' });
+        return;
+      }
+
+      console.log('[ASR] Request received, format:', format || 'unknown');
+
+      // 动态导入SDK
+      const sdk = require('coze-coding-dev-sdk');
+      const config = new sdk.Config();
+      const customHeaders = sdk.HeaderUtils.extractForwardHeaders(req.headers);
+      const client = new sdk.ASRClient(config, customHeaders);
+
+      const result = await client.recognize({
+        uid: `user_${Date.now()}`,
+        base64Data: audioData,
+        audioFormat: format || 'webm'
+      });
+
+      console.log('[ASR] Result:', result);
+      
+      res.json({
+        text: result.text || '',
+        duration: result.duration || 0
+      });
+    } catch (error: any) {
+      console.error('[ASR] Error:', error.message);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // 确保 /api 请求不会被 Vite 中间件拦截
+  app.use((req: Request, _res: Response, next) => {
+    if (req.path.startsWith('/api')) {
+      // API 请求，跳过 Vite 中间件
+      // 但不调用 next('router')，让 Express 继续匹配其他路由
+    } else {
+      next();
+    }
+  });
+
+  // 使用 Vite middleware（处理所有其他请求）
   app.use(vite.middlewares);
 
   console.log('🚀 Vite dev server initialized');
@@ -44,10 +91,6 @@ export function setupStaticServer(app: Application) {
   app.use(express.static(distPath));
 
   // 2. SPA fallback - 所有未处理的请求返回 index.html
-  // 到达这里的请求说明：
-  //   - 不是 API 请求（已被前面注册的路由处理）
-  //   - 不是静态文件（express.static 未找到对应文件）
-  //   - 需要返回 index.html 让前端路由处理
   app.use((_req: Request, res: Response) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
