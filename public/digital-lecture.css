@@ -182,13 +182,15 @@ body {
   border: 2px solid var(--gold);
   border-radius: 12px;
   overflow: hidden;
+  /* 适配视频分辨率 720x1280 (9:16 竖屏) */
+  width: 300px;
+  aspect-ratio: 9 / 16;
+  max-height: 75vh;
 }
 
 .video-player {
   width: 100%;
-  height: auto;
-  min-height: 300px;
-  max-height: 70vh;
+  height: 100%;
   object-fit: contain;
   background: #000;
   display: block;
