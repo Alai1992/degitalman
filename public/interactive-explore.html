@@ -26,60 +26,71 @@
         
         <!-- 内容区域 -->
         <div class="page-content">
-          <!-- 页面标题 -->
-          <header class="page-header">
-            <div class="header-badge">
-              <span class="badge-icon">🔍</span>
-              互动探究
+          <!-- 左侧老兵照片 -->
+          <div class="veteran-portrait">
+            <div class="portrait-frame">
+              <img src="/veteran-avatar.jpg" alt="老兵" class="portrait-img">
             </div>
-            <h1 class="page-title">与历史对话</h1>
-            <p class="page-subtitle">探索抗美援朝历史的点点滴滴</p>
-          </header>
+            <div class="portrait-name">杨德清</div>
+            <div class="portrait-info">92岁 · 抗美援朝老兵</div>
+          </div>
 
-          <!-- 聊天区域 -->
-          <div class="chat-container">
-            <!-- 聊天消息区域 -->
-            <div class="chat-messages" id="chatMessages">
-              <!-- 欢迎消息 -->
-              <div class="message bot-message">
-                <div class="message-avatar"><img src="/veteran-avatar.jpg" alt="老兵" class="avatar-img"></div>
-                <div class="message-content">
-                  <div class="message-text">
-                    您好，我是经历过那场战争的老兵。有什么想了解的，尽管问吧。
+          <!-- 右侧对话区域 -->
+          <div class="chat-wrapper">
+            <!-- 页面标题 -->
+            <header class="page-header">
+              <div class="header-badge">
+                <span class="badge-icon">🔍</span>
+                互动探究
+              </div>
+              <h1 class="page-title">与历史对话</h1>
+              <p class="page-subtitle">探索抗美援朝历史的点点滴滴</p>
+            </header>
+
+            <!-- 聊天区域 -->
+            <div class="chat-container">
+              <!-- 聊天消息区域 -->
+              <div class="chat-messages" id="chatMessages">
+                <!-- 欢迎消息 -->
+                <div class="message bot-message">
+                  <div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div>
+                  <div class="message-content">
+                    <div class="message-text">
+                      您好，我是经历过那场战争的老兵。有什么想了解的，尽管问吧。
+                    </div>
                   </div>
-                  <div class="message-time">系统</div>
+                </div>
+              </div>
+
+              <!-- 输入区域 -->
+              <div class="chat-input-area">
+                <div class="input-container">
+                  <textarea 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="请输入您的问题..."
+                    rows="1"
+                  ></textarea>
+                  <button class="send-button" id="sendBtn">
+                    <span class="send-icon">➤</span>
+                    发送
+                  </button>
+                </div>
+                <div class="input-hint">
+                  提示：您可以询问关于战役、英雄、后勤、战略等各类问题
                 </div>
               </div>
             </div>
 
-            <!-- 输入区域 -->
-            <div class="chat-input-area">
-              <div class="input-container">
-                <textarea 
-                  class="chat-input" 
-                  id="chatInput" 
-                  placeholder="请输入您的问题..."
-                  rows="1"
-                ></textarea>
-                <button class="send-button" id="sendBtn">
-                  <span class="send-icon">➤</span>
-                  发送
-                </button>
+            <!-- 快捷问题 -->
+            <div class="quick-questions">
+              <div class="quick-title">试试这些问题</div>
+              <div class="quick-buttons">
+                <button class="quick-btn" data-question="请讲讲长津湖战役的故事">长津湖战役的故事</button>
+                <button class="quick-btn" data-question="上甘岭战役有多激烈">上甘岭战役有多激烈</button>
+                <button class="quick-btn" data-question="志愿军战士的日常生活是怎样的">战士的日常生活</button>
+                <button class="quick-btn" data-question="为什么说上甘岭精神">上甘岭精神</button>
               </div>
-              <div class="input-hint">
-                提示：您可以询问关于战役、英雄、后勤、战略等各类问题
-              </div>
-            </div>
-          </div>
-
-          <!-- 快捷问题 -->
-          <div class="quick-questions">
-            <div class="quick-title">试试这些问题</div>
-            <div class="quick-buttons">
-              <button class="quick-btn" data-question="请讲讲长津湖战役的故事">长津湖战役的故事</button>
-              <button class="quick-btn" data-question="上甘岭战役有多激烈">上甘岭战役有多激烈</button>
-              <button class="quick-btn" data-question="志愿军战士的日常生活是怎样的">战士的日常生活</button>
-              <button class="quick-btn" data-question="为什么说上甘岭精神">上甘岭精神</button>
             </div>
           </div>
         </div>
@@ -178,9 +189,8 @@
         userMsg.innerHTML = 
           '<div class="message-content">' +
             '<div class="message-text">' + escapeHtml(text) + '</div>' +
-            '<div class="message-time">' + formatTime(new Date()) + '</div>' +
           '</div>' +
-          '<div class="message-avatar"><img src="/student-avatar.jpg" alt="学生" class="avatar-img"></div>';
+          '<div class="message-avatar"><img src="/student-avatar.jpg" alt="" class="avatar-img"></div>';
         chatMessages.appendChild(userMsg);
         
         // 保存对话历史
@@ -197,10 +207,9 @@
         botMsg.className = 'message bot-message';
         botMsg.id = messageId;
         botMsg.innerHTML = 
-          '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="老兵" class="avatar-img"></div>' +
+          '<div class="message-avatar"><img src="/veteran-avatar.jpg" alt="" class="avatar-img"></div>' +
           '<div class="message-content">' +
             '<div class="message-text"></div>' +
-            '<div class="message-time">老兵</div>' +
           '</div>';
         chatMessages.appendChild(botMsg);
         return botMsg;
@@ -253,11 +262,7 @@
 
         } catch (error) {
           console.error('请求失败:', error);
-          var messageEl = document.getElementById(messageId);
-          if (messageEl) {
-            var textEl = messageEl.querySelector('.message-text');
-            textEl.textContent = '抱歉，服务出现问题，请稍后再试。';
-          }
+          textEl.textContent = '抱歉，服务出现问题，请稍后再试。';
         }
 
         isStreaming = false;
@@ -275,18 +280,18 @@
         }
       }
 
-      // 格式化时间
-      function formatTime(date) {
-        var hours = date.getHours().toString().padStart(2, '0');
-        var minutes = date.getMinutes().toString().padStart(2, '0');
-        return hours + ':' + minutes;
-      }
-
       // HTML转义
       function escapeHtml(text) {
         var div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+      }
+
+      // 格式化时间
+      function formatTime(date) {
+        var hours = date.getHours().toString().padStart(2, '0');
+        var minutes = date.getMinutes().toString().padStart(2, '0');
+        return hours + ':' + minutes;
       }
     </script>
   </body>
