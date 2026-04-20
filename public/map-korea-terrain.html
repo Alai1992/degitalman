@@ -1,296 +1,432 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>朝鲜半岛地形图 - 抗美援朝数字展馆</title>
-    <link rel="stylesheet" href="map-korea-terrain.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>朝鲜半岛地形图 - 历史地图</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+      background: linear-gradient(135deg, #1a0a0a 0%, #2d1810 50%, #1a0a0a 100%);
+      min-height: 100vh;
+      color: #e8d5b7;
+    }
+    
+    /* 战火背景 */
+    .war-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+      background: 
+        radial-gradient(ellipse at top, rgba(139, 0, 0, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(139, 69, 19, 0.3) 0%, transparent 50%);
+    }
+    
+    /* 页面头部 */
+    .page-header {
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.9), rgba(80, 20, 20, 0.95));
+      border-bottom: 2px solid #daa520;
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .back-button {
+      background: linear-gradient(135deg, #daa520, #b8860b);
+      border: none;
+      color: #1a0a0a;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(218, 165, 32, 0.4);
+    }
+    
+    .page-title {
+      flex: 1;
+      text-align: center;
+    }
+    
+    .page-title h1 {
+      font-size: 1.8rem;
+      color: #daa520;
+      text-shadow: 0 0 10px rgba(218, 165, 32, 0.5);
+    }
+    
+    .page-title .subtitle {
+      font-size: 0.9rem;
+      color: #c9a86c;
+      margin-top: 0.3rem;
+    }
+    
+    .header-spacer {
+      width: 100px;
+    }
+    
+    /* 主内容区 */
+    .main-content {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    
+    /* 地图容器 */
+    .map-container {
+      background: linear-gradient(135deg, rgba(45, 24, 16, 0.95), rgba(30, 15, 10, 0.98));
+      border: 2px solid #8b6914;
+      border-radius: 15px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .map-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #8b6914, #daa520, #8b6914);
+    }
+    
+    /* 地图图片 */
+    .map-image-container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+      border: 3px solid #8b6914;
+    }
+    
+    .map-image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* 地理信息卡片 */
+    .geo-info {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .info-card {
+      background: rgba(45, 24, 16, 0.9);
+      border: 1px solid #8b6914;
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .info-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(139, 0, 0, 0.3);
+    }
+    
+    .info-card h3 {
+      color: #daa520;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px dashed #8b6914;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .info-card ul {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .info-card li {
+      padding: 0.6rem 0;
+      color: #d4c4a8;
+      border-bottom: 1px dotted rgba(139, 105, 20, 0.3);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.5;
+    }
+    
+    .info-card li:last-child {
+      border-bottom: none;
+    }
+    
+    .info-card li::before {
+      content: '◆';
+      color: #daa520;
+      font-size: 0.5rem;
+      margin-top: 0.4rem;
+      flex-shrink: 0;
+    }
+    
+    .highlight {
+      color: #daa520;
+      font-weight: 600;
+    }
+    
+    /* 图例 */
+    .legend-box {
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid #8b6914;
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    
+    .legend-box h3 {
+      color: #daa520;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 5px;
+    }
+    
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .legend-dot.capital { background: #e74c3c; }
+    .legend-dot.city { background: #f39c12; }
+    .legend-dot.mountain { background: #27ae60; }
+    .legend-dot.river { background: #3498db; }
+    .legend-dot.port { background: #9b59b6; }
+    
+    .legend-note {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(139, 105, 20, 0.5);
+    }
+    
+    .legend-note p {
+      color: #c9a86c;
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
+    }
+    
+    .legend-note strong {
+      color: #daa520;
+    }
+    
+    /* 装饰元素 */
+    .corner-decoration {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border: 2px solid #daa520;
+      opacity: 0.3;
+    }
+    
+    .corner-decoration.top-left {
+      top: 10px;
+      left: 10px;
+      border-right: none;
+      border-bottom: none;
+    }
+    
+    .corner-decoration.top-right {
+      top: 10px;
+      right: 10px;
+      border-left: none;
+      border-bottom: none;
+    }
+    
+    .corner-decoration.bottom-left {
+      bottom: 10px;
+      left: 10px;
+      border-right: none;
+      border-top: none;
+    }
+    
+    .corner-decoration.bottom-right {
+      bottom: 10px;
+      right: 10px;
+      border-left: none;
+      border-top: none;
+    }
+    
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .page-title h1 {
+        font-size: 1.4rem;
+      }
+      
+      .main-content {
+        padding: 0 1rem;
+      }
+      
+      .map-container {
+        padding: 1rem;
+      }
+      
+      .geo-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="map-container">
-        <header class="map-header">
-            <button class="back-btn" onclick="goBack()">
-                <span class="back-icon">←</span>
-                <span>返回知识宝库</span>
-            </button>
-            <h1 class="map-title">朝鲜半岛地形图</h1>
-        </header>
-
-        <div class="map-content">
-            <!-- 地图主图 -->
-            <div class="map-wrapper">
-                <div class="map-frame">
-                    <svg viewBox="0 0 800 600" class="korea-map">
-                        <!-- 背景 -->
-                        <defs>
-                            <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#e8dcc8"/>
-                                <stop offset="100%" style="stop-color:#d4c4a8"/>
-                            </linearGradient>
-                            <linearGradient id="seaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#b8d4e8"/>
-                                <stop offset="100%" style="stop-color:#9cc4dc"/>
-                            </linearGradient>
-                            <filter id="shadow">
-                                <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.3"/>
-                            </filter>
-                        </defs>
-
-                        <!-- 海洋背景 -->
-                        <rect x="0" y="0" width="800" height="600" fill="url(#seaGradient)" rx="5"/>
-                        
-                        <!-- 朝鲜半岛主体 -->
-                        <path d="M 520 280 
-                                 L 530 250 L 540 240 L 555 235 L 570 230 
-                                 L 585 225 L 600 220 L 615 225 L 630 235 
-                                 L 645 240 L 660 245 L 675 250 L 690 255 
-                                 L 705 260 L 710 270 L 705 280 L 700 290 
-                                 L 695 300 L 700 310 L 695 320 L 690 330 
-                                 L 695 340 L 700 350 L 710 355 L 720 350 
-                                 L 730 340 L 740 330 L 750 320 L 760 310 
-                                 L 770 300 L 775 290 L 780 280 L 775 270 
-                                 L 770 260 L 760 255 L 750 260 L 740 265 
-                                 L 730 260 L 720 255 L 710 250 L 700 255 
-                                 L 690 260 L 680 265 L 670 270 L 660 275 
-                                 L 650 280 L 640 285 L 630 290 L 620 295 
-                                 L 610 290 L 600 285 L 590 280 L 580 285 
-                                 L 570 290 L 560 285 L 550 280 L 540 275 
-                                 L 530 280 L 520 280 Z" 
-                              fill="url(#landGradient)" stroke="#8b7355" stroke-width="2" filter="url(#shadow)"/>
-                        
-                        <!-- 38度线 -->
-                        <line x1="530" y1="285" x2="755" y2="275" 
-                              stroke="#c41e3a" stroke-width="2.5" stroke-dasharray="8,4" opacity="0.8"/>
-                        
-                        <!-- 鸭绿江 -->
-                        <path d="M 400 50 L 410 80 L 420 120 L 430 160 L 440 200 L 450 240 L 460 260" 
-                              stroke="#4a90c2" stroke-width="4" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 图们江 -->
-                        <path d="M 480 30 L 490 60 L 500 90 L 510 110 L 520 130" 
-                              stroke="#4a90c2" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 大同江 -->
-                        <path d="M 570 200 L 580 220 L 590 240 L 600 260 L 610 280" 
-                              stroke="#4a90c2" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 清川江 -->
-                        <path d="M 510 180 L 520 200 L 530 220 L 540 240 L 545 260" 
-                              stroke="#4a90c2" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 临津江 -->
-                        <path d="M 630 240 L 640 255 L 650 270 L 660 285" 
-                              stroke="#4a90c2" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 汉江 -->
-                        <path d="M 670 260 L 680 275 L 690 290 L 700 300 L 710 310" 
-                              stroke="#4a90c2" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 洛东江 -->
-                        <path d="M 720 340 L 730 355 L 740 370 L 745 385 L 750 400" 
-                              stroke="#4a90c2" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        
-                        <!-- 礼成江 -->
-                        <path d="M 680 320 L 690 335 L 700 345 L 710 355" 
-                              stroke="#4a90c2" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-                        <!-- 长津湖 -->
-                        <circle cx="455" cy="100" r="8" fill="#4a90c2" stroke="#2d5a7b" stroke-width="1.5"/>
-                        
-                        <!-- 赴战湖 -->
-                        <circle cx="470" cy="85" r="6" fill="#4a90c2" stroke="#2d5a7b" stroke-width="1.5"/>
-                        
-                        <!-- 虚川湖 -->
-                        <circle cx="490" cy="75" r="5" fill="#4a90c2" stroke="#2d5a7b" stroke-width="1"/>
-
-                        <!-- 白头山 -->
-                        <polygon points="430,70 420,90 440,90" fill="#5a8f5a" stroke="#3d6b3d" stroke-width="1"/>
-                        <text x="430" y="65" font-size="9" fill="#3d6b3d" text-anchor="middle" font-weight="bold">白头山</text>
-                        <text x="430" y="105" font-size="8" fill="#5a8f5a" text-anchor="middle">2718m</text>
-
-                        <!-- 妙香山 -->
-                        <polygon points="500,140 492,155 508,155" fill="#5a8f5a" stroke="#3d6b3d" stroke-width="1"/>
-                        <text x="500" y="135" font-size="8" fill="#3d6b3d" text-anchor="middle">妙香山</text>
-
-                        <!-- 狼林山脉 -->
-                        <text x="480" y="160" font-size="9" fill="#5a8f5a" font-weight="bold">狼林山脉</text>
-                        <line x1="460" y1="155" x2="500" y2="155" stroke="#5a8f5a" stroke-width="1.5"/>
-                        
-                        <!-- 太白山脉 -->
-                        <text x="560" y="180" font-size="9" fill="#5a8f5a" font-weight="bold">太白山脉</text>
-                        <line x1="540" y1="175" x2="580" y2="175" stroke="#5a8f5a" stroke-width="1.5"/>
-
-                        <!-- 首都标注 -->
-                        <circle cx="570" cy="270" r="8" fill="#c41e3a" stroke="#8b0000" stroke-width="2"/>
-                        <text x="570" y="265" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="bold">平壤</text>
-                        
-                        <circle cx="680" cy="305" r="8" fill="#c41e3a" stroke="#8b0000" stroke-width="2"/>
-                        <text x="680" y="300" font-size="10" fill="#1a1a1a" text-anchor="middle" font-weight="bold">汉城</text>
-                        <text x="680" y="322" font-size="8" fill="#555" text-anchor="middle">(首尔)</text>
-
-                        <!-- 主要城市 -->
-                        <circle cx="440" cy="240" r="5" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="440" y="258" font-size="8" fill="#333" text-anchor="middle">新义州</text>
-
-                        <circle cx="510" cy="210" r="5" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="510" y="225" font-size="8" fill="#333" text-anchor="middle">价川</text>
-
-                        <circle cx="490" cy="180" r="5" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="490" y="195" font-size="8" fill="#333" text-anchor="middle">安州</text>
-
-                        <circle cx="470" cy="150" r="5" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="470" y="165" font-size="8" fill="#333" text-anchor="middle">熙川</text>
-
-                        <circle cx="525" cy="225" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="525" y="238" font-size="7" fill="#333" text-anchor="middle">球场</text>
-
-                        <circle cx="545" cy="250" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="545" y="263" font-size="7" fill="#333" text-anchor="middle">肃川</text>
-
-                        <circle cx="575" cy="235" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="575" y="248" font-size="7" fill="#333" text-anchor="middle">沙里院</text>
-
-                        <circle cx="620" cy="260" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="620" y="273" font-size="7" fill="#333" text-anchor="middle">开城</text>
-
-                        <circle cx="550" cy="200" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="550" y="213" font-size="7" fill="#333" text-anchor="middle">顺川</text>
-
-                        <circle cx="600" cy="215" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="600" y="228" font-size="7" fill="#333" text-anchor="middle">黄州</text>
-
-                        <circle cx="460" cy="130" r="4" fill="#e67e22" stroke="#c0610a" stroke-width="1"/>
-                        <text x="460" y="143" font-size="7" fill="#333" text-anchor="middle">水丰</text>
-
-                        <!-- 战略要地 -->
-                        <rect x="448" y="93" width="14" height="14" fill="#e67e22" stroke="#c0610a" stroke-width="1" transform="rotate(45 455 100)"/>
-                        <text x="455" y="118" font-size="7" fill="#c0610a" text-anchor="middle" font-weight="bold">长津湖</text>
-
-                        <rect x="608" y="278" width="10" height="10" fill="#e67e22" stroke="#c0610a" stroke-width="1" transform="rotate(45 613 283)"/>
-                        <text x="613" y="298" font-size="7" fill="#c0610a" text-anchor="middle" font-weight="bold">铁原</text>
-
-                        <rect x="650" y="280" width="10" height="10" fill="#e67e22" stroke="#c0610a" stroke-width="1" transform="rotate(45 655 285)"/>
-                        <text x="655" y="300" font-size="7" fill="#c0610a" text-anchor="middle" font-weight="bold">横城</text>
-
-                        <!-- 港口城市 -->
-                        <circle cx="655" cy="290" r="5" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="655" y="305" font-size="8" fill="#333" text-anchor="middle">仁川</text>
-
-                        <circle cx="750" cy="395" r="6" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="750" y="410" font-size="8" fill="#333" text-anchor="middle">釜山</text>
-
-                        <circle cx="620" cy="150" r="5" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="620" y="165" font-size="8" fill="#333" text-anchor="middle">元山</text>
-
-                        <circle cx="580" cy="110" r="5" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="580" y="125" font-size="8" fill="#333" text-anchor="middle">咸兴</text>
-
-                        <circle cx="530" cy="60" r="5" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="530" y="75" font-size="8" fill="#333" text-anchor="middle">清津</text>
-
-                        <circle cx="740" cy="350" r="5" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="740" y="365" font-size="8" fill="#333" text-anchor="middle">大邱</text>
-
-                        <circle cx="710" cy="370" r="5" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="710" y="385" font-size="8" fill="#333" text-anchor="middle">大田</text>
-
-                        <circle cx="730" cy="420" r="4" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="730" y="433" font-size="7" fill="#333" text-anchor="middle">光州</text>
-
-                        <circle cx="690" cy="315" r="4" fill="#8e44ad" stroke="#6c3483" stroke-width="1"/>
-                        <text x="690" y="328" font-size="7" fill="#333" text-anchor="middle">水原</text>
-
-                        <!-- 标签标注 -->
-                        <text x="60" y="100" font-size="10" fill="#4a90c2" font-weight="bold">黄海</text>
-                        <text x="200" y="50" font-size="10" fill="#4a90c2" font-weight="bold">图们江</text>
-                        <text x="300" y="150" font-size="10" fill="#4a90c2" font-weight="bold">鸭绿江</text>
-                        <text x="650" y="130" font-size="10" fill="#4a90c2" font-weight="bold">日本海</text>
-                        <text x="500" y="550" font-size="10" fill="#4a90c2" font-weight="bold">朝鲜海峡</text>
-
-                        <!-- 38度线标注 -->
-                        <text x="640" y="260" font-size="9" fill="#c41e3a" font-weight="bold" transform="rotate(-5 640 260)">38°线</text>
-
-                        <!-- 中朝边境标注 -->
-                        <text x="380" y="160" font-size="9" fill="#5a8f5a" font-weight="bold">中朝边境</text>
-                    </svg>
-                    
-                    <!-- 图例 -->
-                    <div class="map-legend">
-                        <h3>图例说明</h3>
-                        <div class="legend-item">
-                            <span class="legend-icon city-capital"></span>
-                            <span class="legend-text">首都</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon city-main"></span>
-                            <span class="legend-text">主要城市</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon city-port"></span>
-                            <span class="legend-text">港口城市</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon river"></span>
-                            <span class="legend-text">河流</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon lake"></span>
-                            <span class="legend-text">湖泊</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon mountain"></span>
-                            <span class="legend-text">山脉</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon strategic"></span>
-                            <span class="legend-text">战略要地</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon line-38"></span>
-                            <span class="legend-text">38°军事分界线</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-icon border-china"></span>
-                            <span class="legend-text">中朝边境</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 信息卡片 -->
-            <div class="info-cards">
-                <div class="info-card">
-                    <h3>朝鲜半岛概况</h3>
-                    <p>位于东亚朝鲜半岛，北接中国和俄罗斯，东临日本海，西濒黄海，南隔朝鲜海峡与日本相望。总面积约22万平方公里。</p>
-                </div>
-                <div class="info-card">
-                    <h3>主要山脉</h3>
-                    <p>北部为盖马高原和白头山（最高峰2718米），中部为狼林山脉和太白山脉，形成天然地理屏障。</p>
-                </div>
-                <div class="info-card">
-                    <h3>主要河流</h3>
-                    <p>鸭绿江和图们江为中朝界河，大同江、清川江、临津江、汉江为主要河流，水系发达。</p>
-                </div>
-                <div class="info-card">
-                    <h3>战略意义</h3>
-                    <p>半岛地势北高南低，三面环海。38度线将南北分开，形成对峙的军事格局，具有重要战略意义。</p>
-                </div>
-            </div>
-        </div>
+  <div class="war-background"></div>
+  
+  <header class="page-header">
+    <div class="header-content">
+      <button class="back-button" onclick="goBack()">
+        <span>←</span>
+        <span>返回</span>
+      </button>
+      <div class="page-title">
+        <h1>🗺️ 朝鲜半岛地形图</h1>
+        <div class="subtitle">抗美援朝战争历史地图</div>
+      </div>
+      <div class="header-spacer"></div>
     </div>
-
-    <script>
-        function goBack() {
-            const tab = sessionStorage.getItem('lastTab') || 'documents';
-            window.location.href = `learning-support.html?tab=${tab}`;
-        }
+  </header>
+  
+  <main class="main-content">
+    <div class="map-container">
+      <div class="corner-decoration top-left"></div>
+      <div class="corner-decoration top-right"></div>
+      <div class="corner-decoration bottom-left"></div>
+      <div class="corner-decoration bottom-right"></div>
+      
+      <!-- 地形图 -->
+      <div class="map-image-container">
+        <img src="/images/korea-terrain-map.jpg" alt="朝鲜半岛地形图" />
+      </div>
+      
+      <!-- 图例 -->
+      <div class="legend-box">
+        <h3>📋 图例说明</h3>
+        <div class="legend-items">
+          <div class="legend-item">
+            <div class="legend-dot capital"></div>
+            <span>首都/大城市（红色圆点）</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot city"></div>
+            <span>主要城市（橙色圆点）</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot mountain"></div>
+            <span>山脉/高原（绿色区域）</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot river"></div>
+            <span>河流/湖泊（蓝色线条）</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot port"></div>
+            <span>港口城市（紫色标注）</span>
+          </div>
+        </div>
+        <div class="legend-note">
+          <p><strong>38度线</strong>：地图中部的红色虚线为军事分界线</p>
+        </div>
+      </div>
+      
+      <!-- 地理信息 -->
+      <div class="geo-info">
+        <div class="info-card">
+          <h3>🏔️ 地形特征</h3>
+          <ul>
+            <li><span class="highlight">东高西低</span>：朝鲜半岛地势东高西低，东部为太白山脉和狼林山脉</li>
+            <li><span class="highlight">山地广布</span>：全境约80%为山地和高原，平原较少</li>
+            <li><span class="highlight">白头山</span>：海拔2744米，为半岛最高峰，中朝界山</li>
+            <li><span class="highlight">北部高原</span>：盖马高原海拔1000-1500米，地势险要</li>
+            <li><span class="highlight">西部平原</span>：主要由大同江流域和礼成江流域冲积而成</li>
+          </ul>
+        </div>
         
-        // 页面加载时标记当前tab
-        document.addEventListener('DOMContentLoaded', function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const tab = urlParams.get('tab') || 'documents';
-            sessionStorage.setItem('lastTab', tab);
-        });
-    </script>
+        <div class="info-card">
+          <h3>🌊 水系分布</h3>
+          <ul>
+            <li><span class="highlight">鸭绿江</span>：中朝界河，全长795公里，是重要的自然边界</li>
+            <li><span class="highlight">图们江</span>：中朝苏三国界河，全长521公里</li>
+            <li><span class="highlight">大同江</span>：朝鲜半岛第四长河，流经平壤，全长431公里</li>
+            <li><span class="highlight">清川江</span>：战时重要军事分界线，1950年底战役发生地</li>
+            <li><span class="highlight">临津江</span>：韩朝界河，战争期间双方反复争夺</li>
+          </ul>
+        </div>
+        
+        <div class="info-card">
+          <h3>🎯 战略要地</h3>
+          <ul>
+            <li><span class="highlight">平壤</span>：朝鲜首都，位于大同江畔，战争期间反复易手</li>
+            <li><span class="highlight">汉城/首尔</span>：韩国首都，朝鲜战争主要战场</li>
+            <li><span class="highlight">元山</span>：东海岸重要港口城市，登陆作战目标</li>
+            <li><span class="highlight">仁川</span>：西海岸港口，麦克阿瑟登陆地点</li>
+            <li><span class="highlight">釜山</span>：最南端港口，联合国军最后防线</li>
+          </ul>
+        </div>
+        
+        <div class="info-card">
+          <h3>🗺️ 战役地理</h3>
+          <ul>
+            <li><span class="highlight">长津湖</span>：位于咸镜南道，海拔1200米，极寒战场</li>
+            <li><span class="highlight">上甘岭</span>：五圣山南麓，1952年上甘岭战役发生地</li>
+            <li><span class="highlight">铁原</span>：朝鲜中部战略要地，志愿军后勤枢纽</li>
+            <li><span class="highlight">砥平里</span>：联合国军重要据点，志愿军进攻受挫</li>
+            <li><span class="highlight">横城</span>：曾发生大规模反击战役</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    function goBack() {
+      var returnTab = new URLSearchParams(window.location.search).get('returnTab') || 'maps';
+      window.location.href = '/learning-support.html?tab=' + returnTab;
+    }
+  </script>
 </body>
 </html>
