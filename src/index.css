@@ -152,6 +152,11 @@ body {
   overflow: hidden;
 }
 
+/* 历史意义卡片 - 靠下对齐 */
+.significance-card {
+  margin-top: auto;
+}
+
 .intro-header {
   display: flex;
   align-items: center;
