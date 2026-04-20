@@ -178,83 +178,102 @@
           };
         }
 
-        // 语音输入功能
+        // 语音输入功能 - 使用Web Speech API
         var voiceBtn = document.getElementById('voiceBtn');
-        var mediaRecorder = null;
-        var audioChunks = [];
+        var recognition = null;
+        var isRecording = false;
 
-        if (voiceBtn) {
-          // 获取麦克风权限并开始录音
-          voiceBtn.onmousedown = async function() {
-            try {
-              // 请求麦克风权限
-              var stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-              mediaRecorder = new MediaRecorder(stream);
-              audioChunks = [];
+        // 检测浏览器是否支持Web Speech API
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-              mediaRecorder.ondataavailable = function(e) {
-                audioChunks.push(e.data);
-              };
+        if (SpeechRecognition && voiceBtn) {
+          recognition = new SpeechRecognition();
+          recognition.continuous = false;
+          recognition.interimResults = true;
+          recognition.lang = 'zh-CN';
 
-              mediaRecorder.onstop = async function() {
-                // 停止所有轨道
-                stream.getTracks().forEach(track => track.stop());
+          recognition.onstart = function() {
+            isRecording = true;
+            voiceBtn.classList.add('recording');
+            voiceBtn.querySelector('.voice-icon').textContent = '🔴';
+          };
 
-                // 将音频转换为base64
-                var audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                var reader = new FileReader();
-                reader.onloadend = function() {
-                  var base64Data = reader.result.split(',')[1];
+          recognition.onresult = function(event) {
+            var finalTranscript = '';
+            var interimTranscript = '';
 
-                  // 调用语音识别API
-                  fetch('/api/asr', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ audioData: base64Data })
-                  })
-                  .then(function(response) { return response.json(); })
-                  .then(function(data) {
-                    if (data.success && data.text) {
-                      chatInput.value = data.text;
-                      // 自动发送
-                      sendMessage();
-                    } else {
-                      alert('未能识别语音，请重试');
-                    }
-                  })
-                  .catch(function() {
-                    alert('语音识别失败，请重试');
-                  });
-                };
-                reader.readAsDataURL(audioBlob);
-              };
+            for (var i = event.resultIndex; i < event.results.length; i++) {
+              var transcript = event.results[i][0].transcript;
+              if (event.results[i].isFinal) {
+                finalTranscript += transcript;
+              } else {
+                interimTranscript += transcript;
+              }
+            }
 
-              mediaRecorder.start();
-              voiceBtn.classList.add('recording');
-              voiceBtn.querySelector('.voice-icon').textContent = '🔴';
-            } catch (err) {
-              console.error('获取麦克风权限失败:', err);
-              alert('无法访问麦克风，请检查权限设置');
+            // 显示实时识别结果
+            chatInput.value = finalTranscript || interimTranscript;
+
+            // 如果是最终结果，自动发送
+            if (finalTranscript && event.results[i-1].isFinal) {
+              setTimeout(function() {
+                if (chatInput.value.trim()) {
+                  sendMessage();
+                }
+              }, 500);
             }
           };
 
-          // 松开鼠标停止录音
+          recognition.onerror = function(event) {
+            console.error('语音识别错误:', event.error);
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.querySelector('.voice-icon').textContent = '🎤';
+
+            if (event.error === 'not-allowed') {
+              alert('无法访问麦克风，请检查浏览器权限设置');
+            } else if (event.error === 'no-speech') {
+              alert('未检测到语音，请重试');
+            }
+          };
+
+          recognition.onend = function() {
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.querySelector('.voice-icon').textContent = '🎤';
+          };
+
+          // 按住按钮开始录音
+          voiceBtn.onmousedown = function() {
+            if (!isRecording) {
+              try {
+                recognition.start();
+              } catch (e) {
+                console.error('启动语音识别失败:', e);
+              }
+            }
+          };
+
+          // 松开按钮停止录音
           voiceBtn.onmouseup = function() {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-              mediaRecorder.stop();
-              voiceBtn.classList.remove('recording');
-              voiceBtn.querySelector('.voice-icon').textContent = '🎤';
+            if (isRecording && recognition) {
+              recognition.stop();
             }
           };
 
-          // 鼠标离开时也停止录音
+          // 鼠标离开时停止录音
           voiceBtn.onmouseleave = function() {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-              mediaRecorder.stop();
-              voiceBtn.classList.remove('recording');
-              voiceBtn.querySelector('.voice-icon').textContent = '🎤';
+            if (isRecording && recognition) {
+              recognition.stop();
             }
           };
+
+        } else if (voiceBtn) {
+          // 浏览器不支持Web Speech API
+          voiceBtn.onclick = function() {
+            alert('您的浏览器不支持语音识别功能，请使用Chrome、Edge或Safari浏览器');
+          };
+          voiceBtn.title = '浏览器不支持语音识别';
         }
 
         // 快捷问题点击
