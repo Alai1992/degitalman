@@ -241,6 +241,22 @@
     .legend-dot.river { background: #3498db; }
     .legend-dot.port { background: #9b59b6; }
     
+    .legend-note {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(139, 105, 20, 0.5);
+    }
+    
+    .legend-note p {
+      color: #c9a86c;
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
+    }
+    
+    .legend-note strong {
+      color: #daa520;
+    }
+    
     /* 装饰元素 */
     .corner-decoration {
       position: absolute;
@@ -333,24 +349,27 @@
         <div class="legend-items">
           <div class="legend-item">
             <div class="legend-dot capital"></div>
-            <span>首都/大城市</span>
+            <span>首都/大城市（红色圆点）</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot city"></div>
-            <span>主要城市</span>
+            <span>主要城市（橙色圆点）</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot mountain"></div>
-            <span>山脉地形</span>
+            <span>山脉/高原（绿色区域）</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot river"></div>
-            <span>河流湖泊</span>
+            <span>河流/湖泊（蓝色线条）</span>
           </div>
           <div class="legend-item">
             <div class="legend-dot port"></div>
-            <span>港口</span>
+            <span>港口城市（紫色标注）</span>
           </div>
+        </div>
+        <div class="legend-note">
+          <p><strong>38度线</strong>：地图中部的红色虚线为军事分界线</p>
         </div>
       </div>
       
@@ -405,7 +424,8 @@
   
   <script>
     function goBack() {
-      window.location.href = '/learning-support.html';
+      var returnTab = new URLSearchParams(window.location.search).get('returnTab') || 'maps';
+      window.location.href = '/learning-support.html?tab=' + returnTab;
     }
   </script>
 </body>

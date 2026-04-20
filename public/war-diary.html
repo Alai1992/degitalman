@@ -337,7 +337,8 @@
   
   <script>
     function goBack() {
-      window.location.href = '/learning-support.html';
+      var returnTab = new URLSearchParams(window.location.search).get('returnTab') || 'documents';
+      window.location.href = '/learning-support.html?tab=' + returnTab;
     }
   </script>
 </body>
