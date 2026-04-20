@@ -260,13 +260,14 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
-  height: 260px;
+  min-height: 420px;
+  padding: 1.5rem 0;
 }
 
 /* 正方形模块卡片 */
 .module-card.square-card {
-  width: 260px;
-  height: 100%;
+  width: 400px;
+  height: 400px;
   border-radius: 18px;
   position: relative;
   overflow: visible;
@@ -373,9 +374,9 @@ body {
 
 .module-number {
   position: absolute;
-  top: 0.8rem;
-  right: 1rem;
-  font-size: 3rem;
+  top: 1rem;
+  right: 1.2rem;
+  font-size: 4.5rem;
   font-weight: 900;
   color: var(--gold);
   opacity: 0.45;
@@ -384,8 +385,8 @@ body {
 }
 
 .module-icon {
-  font-size: 4rem;
-  margin-bottom: 0.6rem;
+  font-size: 6rem;
+  margin-bottom: 1rem;
   filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.6));
 }
 
@@ -397,16 +398,16 @@ body {
 }
 
 .module-title {
-  font-size: 1.6rem;
+  font-size: 2.2rem;
   font-weight: 700;
   color: var(--text-cream);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.5rem;
   transition: color 0.4s ease;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 .module-desc {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   color: var(--text-light);
   opacity: 0.9;
 }
