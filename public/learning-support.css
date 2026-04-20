@@ -354,6 +354,29 @@ body {
   background: linear-gradient(135deg, #a00000, var(--war-red));
 }
 
+/* 播放按钮样式 */
+.play-btn {
+  min-width: 80px;
+}
+
+.play-btn.playing {
+  background: linear-gradient(135deg, #b8860b, #8b6914);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.play-btn.playing:hover {
+  background: linear-gradient(135deg, #d4a017, #b8860b);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(218, 165, 32, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 15px 5px rgba(218, 165, 32, 0.2);
+  }
+}
+
 /* 纪念馆特殊样式 */
 .museum-item .item-content p {
   margin-bottom: 12px;

@@ -391,7 +391,7 @@
                 <p class="panel-desc">抗美援朝时期的革命歌曲、广播录音、电台节目等音频资源</p>
               </div>
               <div class="resource-grid">
-                <div class="resource-item">
+                <div class="resource-item" id="song-item">
                   <div class="item-icon">🎼</div>
                   <div class="item-content">
                     <h3>《中国人民志愿军战歌》</h3>
@@ -401,7 +401,7 @@
                       <span class="meta-size">MP3 3.2MB</span>
                     </div>
                   </div>
-                  <button class="item-btn">播放</button>
+                  <button class="item-btn play-btn" id="songPlayBtn" data-playing="false">▶ 播放</button>
                 </div>
                 <div class="resource-item">
                   <div class="item-icon">🎹</div>
@@ -740,6 +740,53 @@
           };
           item.style.cursor = 'pointer';
         });
+        
+        // 音频播放控制
+        var audio = new Audio();
+        var songPlayBtn = document.getElementById('songPlayBtn');
+        
+        // 志愿军战歌音频源 - 使用公开的音乐URL
+        audio.src = 'https://music.163.com/song/media/outer/url?id=5271369.mp3';
+        audio.loop = false;
+        
+        if (songPlayBtn) {
+          songPlayBtn.onclick = function() {
+            var isPlaying = songPlayBtn.getAttribute('data-playing') === 'true';
+            
+            if (isPlaying) {
+              // 停止播放
+              audio.pause();
+              audio.currentTime = 0;
+              songPlayBtn.textContent = '▶ 播放';
+              songPlayBtn.classList.remove('playing');
+              songPlayBtn.setAttribute('data-playing', 'false');
+            } else {
+              // 开始播放
+              audio.play().catch(function(err) {
+                console.log('音频播放失败:', err);
+                alert('音频加载中，请稍后再试...');
+              });
+              songPlayBtn.textContent = '■ 停止';
+              songPlayBtn.classList.add('playing');
+              songPlayBtn.setAttribute('data-playing', 'true');
+            }
+          };
+          
+          // 播放结束后的回调
+          audio.onended = function() {
+            songPlayBtn.textContent = '▶ 播放';
+            songPlayBtn.classList.remove('playing');
+            songPlayBtn.setAttribute('data-playing', 'false');
+          };
+          
+          // 播放出错处理
+          audio.onerror = function() {
+            songPlayBtn.textContent = '▶ 播放';
+            songPlayBtn.classList.remove('playing');
+            songPlayBtn.setAttribute('data-playing', 'false');
+            console.log('音频加载失败');
+          };
+        }
         
         console.log('学习支持页面初始化完成');
       };
