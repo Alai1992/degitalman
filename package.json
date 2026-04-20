@@ -11,6 +11,8 @@
     "ts-check": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1032.0",
+    "@aws-sdk/s3-request-presigner": "^3.1032.0",
     "@supabase/supabase-js": "2.95.3",
     "dotenv": "^17.2.3",
     "express": "^4.21.2"
