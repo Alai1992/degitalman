@@ -38,16 +38,26 @@
 
           <!-- 主内容区 -->
           <div class="main-grid">
-            <!-- 左侧：数字人展示区 -->
+            <!-- 左侧：视频/数字人展示区 -->
             <div class="digital-avatar-section">
               <div class="avatar-container">
                 <div class="avatar-frame">
-                  <div class="avatar-placeholder">
+                  <!-- 视频播放器 -->
+                  <video id="courseVideo" class="course-video" controls>
+                    您的浏览器不支持视频播放
+                  </video>
+                  <!-- 数字人占位（无视频时显示） -->
+                  <div class="avatar-placeholder" id="avatarPlaceholder">
                     <div class="avatar-icon">👤</div>
                     <div class="avatar-name">老兵数字人</div>
                   </div>
                   <div class="avatar-glow"></div>
                 </div>
+                <div class="video-title-bar" id="videoTitleBar" style="display: none;">
+                  <span class="video-title-icon">🎬</span>
+                  <span class="video-title-text" id="currentVideoTitle">长津湖的冬天</span>
+                </div>
+              </div>
                 <div class="avatar-info">
                   <h3>志愿军老战士</h3>
                   <p>亲历抗美援朝战争</p>
@@ -118,7 +128,7 @@
                     </div>
                   </div>
                   
-                  <div class="course-item">
+                  <div class="course-item has-video" data-video-src="https://code.coze.cn/api/sandbox/coze_coding/file/proxy?expire_time=-1&file_path=assets%2F%E9%95%BF%E6%B4%A5%E6%B9%96%EF%BC%9A%E5%86%B0%E9%9B%AA%E8%BF%9E%E7%9A%84%E8%A1%80%E4%B8%8E%E7%81%AB+%281%29.mp4&nonce=a47f8603-3005-4266-b00f-23b848cd0625&project_id=7630315604347732022&sign=490b0bfaf79f362a08752dc111d89739f53c477910faebbfefe6e11d10b5b412" data-video-title="长津湖的冬天">
                     <div class="course-thumbnail">
                       <div class="thumbnail-placeholder">❄️</div>
                       <div class="course-duration">15:20</div>
@@ -437,15 +447,64 @@
         
         // 课程项点击
         var courseItems = document.querySelectorAll('.course-item');
+        var video = document.getElementById('courseVideo');
+        var avatarPlaceholder = document.getElementById('avatarPlaceholder');
+        var videoTitleBar = document.getElementById('videoTitleBar');
+        var currentVideoTitle = document.getElementById('currentVideoTitle');
+
         courseItems.forEach(function(item) {
           item.onclick = function() {
-            var playBtn = document.getElementById('playBtn');
-            if (playBtn && !playBtn.classList.contains('playing')) {
-              playBtn.click();
+            // 检查是否有视频
+            var videoSrc = this.getAttribute('data-video-src');
+            var videoTitle = this.getAttribute('data-video-title');
+
+            if (videoSrc && video) {
+              // 如果有视频，播放视频
+              video.src = videoSrc;
+              video.play().catch(function(e) {
+                console.log('视频播放失败:', e);
+              });
+
+              // 隐藏数字人占位，显示视频
+              if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+              if (videoTitleBar) {
+                videoTitleBar.style.display = 'flex';
+                if (currentVideoTitle) currentVideoTitle.textContent = videoTitle || '课程视频';
+              }
+
+              // 更新播放按钮状态
+              var playBtn = document.getElementById('playBtn');
+              if (playBtn) {
+                playBtn.classList.add('playing');
+                var icon = playBtn.querySelector('.btn-icon');
+                var text = playBtn.querySelector('.btn-text');
+                if (icon) icon.textContent = '⏸';
+                if (text) text.textContent = '播放中';
+              }
+            } else {
+              // 没有视频，执行原有逻辑
+              var playBtn = document.getElementById('playBtn');
+              if (playBtn && !playBtn.classList.contains('playing')) {
+                playBtn.click();
+              }
             }
           };
         });
-        
+
+        // 视频播放结束
+        if (video) {
+          video.addEventListener('ended', function() {
+            var playBtn = document.getElementById('playBtn');
+            if (playBtn) {
+              playBtn.classList.remove('playing');
+              var icon = playBtn.querySelector('.btn-icon');
+              var text = playBtn.querySelector('.btn-text');
+              if (icon) icon.textContent = '▶';
+              if (text) text.textContent = '开始播放';
+            }
+          });
+        }
+
         console.log('初始化完成');
       };
     </script>
