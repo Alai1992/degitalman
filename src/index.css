@@ -317,7 +317,7 @@ body {
 }
 
 .module-card:hover .card-background {
-  transform: scale(1.08);
+  transform: scale(1);
 }
 
 /* 卡片遮罩 */
