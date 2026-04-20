@@ -178,22 +178,17 @@
           };
         }
 
-        // 语音输入功能 - 使用Web Speech API
+        // 语音输入功能 - 按下开始，松手停止
         var voiceBtn = document.getElementById('voiceBtn');
         var recognition = null;
         var isRecording = false;
-        var recordingTimeout = null;
+        var interimTranscript = ''; // 累积中间结果
 
         // 检测浏览器是否支持Web Speech API
         var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        // 重置按钮状态的函数
         function resetVoiceButton() {
           isRecording = false;
-          if (recordingTimeout) {
-            clearTimeout(recordingTimeout);
-            recordingTimeout = null;
-          }
           if (voiceBtn) {
             voiceBtn.classList.remove('recording');
             var icon = voiceBtn.querySelector('.voice-icon');
@@ -203,99 +198,114 @@
 
         if (SpeechRecognition && voiceBtn) {
           recognition = new SpeechRecognition();
-          recognition.continuous = true;
+          recognition.continuous = true;  // 持续识别
           recognition.interimResults = true;
           recognition.lang = 'zh-CN';
 
           recognition.onstart = function() {
             isRecording = true;
-            voiceBtn.classList.add('recording');
-            var icon = voiceBtn.querySelector('.voice-icon');
-            if (icon) icon.textContent = '🔴';
+            interimTranscript = '';
+            if (voiceBtn) {
+              voiceBtn.classList.add('recording');
+              var icon = voiceBtn.querySelector('.voice-icon');
+              if (icon) icon.textContent = '🔴';
+            }
           };
 
           recognition.onresult = function(event) {
-            var finalTranscript = '';
-            var interimTranscript = '';
+            var final = '';
+            var interim = '';
 
-            for (var i = event.resultIndex; i < event.results.length; i++) {
+            for (var i = 0; i < event.results.length; i++) {
               var transcript = event.results[i][0].transcript;
               if (event.results[i].isFinal) {
-                finalTranscript += transcript;
+                final += transcript;
               } else {
-                interimTranscript += transcript;
+                interim += transcript;
               }
             }
 
-            // 显示实时识别结果
-            chatInput.value = finalTranscript || interimTranscript;
-
-            // 如果是最终结果，停止识别
-            if (finalTranscript) {
-              // 2秒后自动发送
-              setTimeout(function() {
-                if (chatInput.value.trim()) {
-                  if (recognition) recognition.stop();
-                  resetVoiceButton();
-                  sendMessage();
-                }
-              }, 1500);
-            }
-
-            // 设置超时：3秒无新内容自动停止
-            if (recordingTimeout) clearTimeout(recordingTimeout);
-            recordingTimeout = setTimeout(function() {
-              if (isRecording && recognition) {
-                recognition.stop();
-              }
-            }, 3000);
+            // 更新显示
+            chatInput.value = final || interim;
           };
 
           recognition.onerror = function(event) {
             console.error('语音识别错误:', event.error);
             resetVoiceButton();
-
             if (event.error === 'not-allowed') {
               alert('无法访问麦克风，请检查浏览器权限设置');
-            } else if (event.error === 'no-speech') {
-              // 不提示，静默处理
             }
           };
 
           recognition.onend = function() {
+            // 松手后触发：发送已识别的内容
+            var text = chatInput.value.trim();
             resetVoiceButton();
-            // 如果有识别内容，自动发送
-            if (chatInput.value.trim()) {
+            if (text) {
               sendMessage();
             }
           };
 
-          // 点击按钮开始/停止录音
-          voiceBtn.onclick = function() {
+          // 按下鼠标开始录音
+          voiceBtn.onmousedown = function(e) {
+            e.preventDefault();
+            if (isRecording) return;
+            try {
+              chatInput.value = '';
+              interimTranscript = '';
+              recognition.start();
+            } catch (err) {
+              console.error('启动失败:', err);
+            }
+          };
+
+          // 松开鼠标停止录音
+          voiceBtn.onmouseup = function(e) {
+            e.preventDefault();
+            if (!isRecording) return;
+            try {
+              recognition.stop();
+            } catch (err) {
+              console.error('停止失败:', err);
+            }
+          };
+
+          // 鼠标离开按钮也停止
+          voiceBtn.onmouseleave = function(e) {
             if (isRecording) {
-              // 停止录音
-              if (recognition) {
-                recognition.stop();
-              }
-              resetVoiceButton();
-            } else {
-              // 开始录音
               try {
-                chatInput.value = '';
-                recognition.start();
-              } catch (e) {
-                console.error('启动语音识别失败:', e);
-                resetVoiceButton();
-              }
+                recognition.stop();
+              } catch (err) {}
+            }
+          };
+
+          // 触摸事件支持移动端
+          voiceBtn.ontouchstart = function(e) {
+            e.preventDefault();
+            if (isRecording) return;
+            try {
+              chatInput.value = '';
+              interimTranscript = '';
+              recognition.start();
+            } catch (err) {
+              console.error('启动失败:', err);
+            }
+          };
+
+          voiceBtn.ontouchend = function(e) {
+            e.preventDefault();
+            if (!isRecording) return;
+            try {
+              recognition.stop();
+            } catch (err) {
+              console.error('停止失败:', err);
             }
           };
 
         } else if (voiceBtn) {
-          // 浏览器不支持Web Speech API
           voiceBtn.onclick = function() {
-            alert('您的浏览器不支持语音识别功能，请使用Chrome、Edge或Safari浏览器');
+            alert('您的浏览器不支持语音识别，请使用Chrome、Edge或Safari');
           };
-          voiceBtn.title = '浏览器不支持语音识别';
         }
 
         // 快捷问题点击
