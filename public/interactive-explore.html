@@ -217,65 +217,102 @@
         var currentAudioBtn = null;
         var voiceEnabled = false; // 是否开启语音
         var welcomeTTSGenerated = false; // 欢迎语TTS是否已生成
-        var recognition = null; // 语音识别对象
+        var mediaRecorder = null; // 录音器对象
+        var audioChunks = []; // 音频数据块
         var isRecording = false; // 是否正在录音
-        var recordedText = ''; // 录制的文本
         var voiceInputBtn = document.getElementById('voiceInputBtn');
         var chatInput = document.getElementById('chatInput');
         
-        // 初始化语音识别
-        function initSpeechRecognition() {
-          if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = true;
-            recognition.lang = 'zh-CN';
-            
-            recognition.onstart = function() {
-              isRecording = true;
-              recordedText = '';
-              voiceInputBtn.classList.add('recording');
-            };
-            
-            recognition.onresult = function(event) {
-              var interimTranscript = '';
-              for (var i = event.resultIndex; i < event.results.length; i++) {
-                var transcript = event.results[i][0].transcript;
-                if (event.results[i].isFinal) {
-                  recordedText += transcript;
-                } else {
-                  interimTranscript += transcript;
-                }
-              }
-              chatInput.value = recordedText + interimTranscript;
-            };
-            
-            recognition.onerror = function(event) {
-              console.error('语音识别错误:', event.error);
-              isRecording = false;
-              voiceInputBtn.classList.remove('recording');
-              
-              // 针对网络错误，给用户更友好的提示
-              if (event.error === 'network') {
-                console.warn('语音识别服务暂时不可用，可能是网络连接问题。请检查网络后重试。');
-                alert('语音识别服务暂时不可用，请检查网络连接后重试，或使用键盘输入。');
-              }
-            };
-            
-            recognition.onend = function() {
-              isRecording = false;
-              voiceInputBtn.classList.remove('recording');
-              if (recordedText.trim()) {
-                chatInput.value = recordedText.trim();
-                sendMessage();
-              } else {
-                chatInput.value = '';
-              }
-            };
-          } else {
-            console.warn('当前浏览器不支持语音识别');
+        // 初始化语音录制功能
+        function initSpeechRecording() {
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.warn('当前浏览器不支持录音功能');
             if (voiceInputBtn) voiceInputBtn.style.display = 'none';
+            return;
+          }
+          console.log('[ASR] 语音录制功能已就绪');
+        }
+        
+        // 录音开始
+        async function startRecording() {
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            audioChunks = [];
+            mediaRecorder = new MediaRecorder(stream);
+            
+            mediaRecorder.ondataavailable = (event) => {
+              audioChunks.push(event.data);
+            };
+            
+            mediaRecorder.onstop = async () => {
+              // 停止所有音轨
+              stream.getTracks().forEach(track => track.stop());
+              
+              // 将音频转换为 base64
+              const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+              const base64Data = await blobToBase64(audioBlob);
+              
+              // 发送到后端识别
+              await sendToASR(base64Data);
+            };
+            
+            mediaRecorder.start();
+            isRecording = true;
+            voiceInputBtn.classList.add('recording');
+            console.log('[ASR] 开始录音');
+          } catch (error) {
+            console.error('[ASR] 获取麦克风权限失败:', error);
+            alert('无法访问麦克风，请检查权限设置');
+          }
+        }
+        
+        // 停止录音
+        function stopRecording() {
+          if (mediaRecorder && isRecording) {
+            mediaRecorder.stop();
+            isRecording = false;
+            voiceInputBtn.classList.remove('recording');
+            console.log('[ASR] 停止录音');
+          }
+        }
+        
+        // Blob 转 Base64
+        function blobToBase64(blob) {
+          return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        }
+        
+        // 发送到后端 ASR 识别
+        async function sendToASR(base64Data) {
+          try {
+            console.log('[ASR] 发送音频到后端...');
+            const response = await fetch('/api/asr/recognize', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ audioData: base64Data, format: 'webm' })
+            });
+            
+            const data = await response.json();
+            
+            if (data.error) {
+              console.error('[ASR] 识别失败:', data.error);
+              alert('语音识别失败，请使用键盘输入');
+              return;
+            }
+            
+            console.log('[ASR] 识别结果:', data.text);
+            
+            if (data.text && data.text.trim()) {
+              chatInput.value = data.text.trim();
+              sendMessage();
+            }
+          } catch (error) {
+            console.error('[ASR] 请求失败:', error);
+            alert('语音识别服务暂时不可用，请检查网络或使用键盘输入');
           }
         }
         
@@ -283,37 +320,40 @@
         if (voiceInputBtn) {
           voiceInputBtn.addEventListener('mousedown', function(e) {
             e.preventDefault();
-            if (recognition && !isRecording) {
-              try { recognition.start(); } catch(e) { console.error('启动语音识别失败:', e); }
+            if (!isRecording) {
+              startRecording();
             }
           });
           
           voiceInputBtn.addEventListener('mouseup', function(e) {
             e.preventDefault();
-            voiceInputBtn.classList.remove('recording');
-            if (recognition && isRecording) recognition.stop();
+            if (isRecording) {
+              stopRecording();
+            }
           });
           
           voiceInputBtn.addEventListener('mouseleave', function() {
-            voiceInputBtn.classList.remove('recording');
-            if (recognition && isRecording) recognition.stop();
+            if (isRecording) {
+              stopRecording();
+            }
           });
           
           voiceInputBtn.addEventListener('touchstart', function(e) {
             e.preventDefault();
-            if (recognition && !isRecording) {
-              try { recognition.start(); } catch(e) { console.error('启动语音识别失败:', e); }
+            if (!isRecording) {
+              startRecording();
             }
           });
           
           voiceInputBtn.addEventListener('touchend', function(e) {
             e.preventDefault();
-            voiceInputBtn.classList.remove('recording');
-            if (recognition && isRecording) recognition.stop();
+            if (isRecording) {
+              stopRecording();
+            }
           });
         }
         
-        initSpeechRecognition();
+        initSpeechRecording();
         
         // 语音开关弹窗
         var voiceModal = document.getElementById('voiceModal');

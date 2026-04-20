@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import chatRouter from './chat';
 import ttsRouter from './tts';
+import asrRouter from './asr';
 
 const router = Router();
 
@@ -35,5 +36,8 @@ router.use(chatRouter);
 
 // TTS语音合成接口
 router.use(ttsRouter);
+
+// ASR语音识别接口
+router.use(asrRouter);
 
 export default router;
