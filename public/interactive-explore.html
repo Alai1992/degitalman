@@ -7,8 +7,119 @@
     <title>互动探究 - 抗美援朝老兵数字人</title>
     <link href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/interactive-explore.css">
+    <style>
+      /* 语音开关弹窗样式 */
+      .voice-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+      }
+      
+      .voice-modal.hidden {
+        display: none;
+      }
+      
+      .voice-modal-content {
+        background: linear-gradient(135deg, #2a1a0a 0%, #1a0f05 100%);
+        border: 3px solid #daa520;
+        border-radius: 15px;
+        padding: 2.5rem;
+        text-align: center;
+        max-width: 420px;
+        box-shadow: 0 0 50px rgba(218, 165, 32, 0.3);
+        animation: modalFadeIn 0.3s ease;
+      }
+      
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      
+      .voice-modal-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+      }
+      
+      .voice-modal-title {
+        font-size: 1.6rem;
+        color: #daa520;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+      }
+      
+      .voice-modal-desc {
+        font-size: 1rem;
+        color: #c4a35a;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+      
+      .voice-modal-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+      }
+      
+      .voice-modal-btn {
+        padding: 0.8rem 2rem;
+        border: 2px solid #daa520;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Noto Serif SC', serif;
+      }
+      
+      .voice-modal-btn.enable {
+        background: linear-gradient(135deg, #daa520, #b8860b);
+        color: #1a0f05;
+      }
+      
+      .voice-modal-btn.enable:hover {
+        background: linear-gradient(135deg, #ffd700, #daa520);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(218, 165, 32, 0.4);
+      }
+      
+      .voice-modal-btn.disable {
+        background: transparent;
+        color: #c4a35a;
+      }
+      
+      .voice-modal-btn.disable:hover {
+        background: rgba(218, 165, 32, 0.1);
+        color: #daa520;
+      }
+    </style>
   </head>
   <body class="antialiased">
+    <!-- 语音开关弹窗 -->
+    <div class="voice-modal" id="voiceModal">
+      <div class="voice-modal-content">
+        <div class="voice-modal-icon">🎙️</div>
+        <h2 class="voice-modal-title">是否开启语音对话？</h2>
+        <p class="voice-modal-desc">开启后，老兵的回复将以语音形式自动播放</p>
+        <div class="voice-modal-buttons">
+          <button class="voice-modal-btn enable" id="voiceEnable">开启</button>
+          <button class="voice-modal-btn disable" id="voiceDisable">不开启</button>
+        </div>
+      </div>
+    </div>
+
     <div id="app">
       <!-- 互动探究页面 -->
       <div class="explore-page">
@@ -98,7 +209,35 @@
       window.onload = function() {
         var currentAudio = null;
         var currentAudioBtn = null;
-
+        var voiceEnabled = false; // 是否开启语音
+        var welcomeTTSGenerated = false; // 欢迎语TTS是否已生成
+        
+        // 语音开关弹窗
+        var voiceModal = document.getElementById('voiceModal');
+        var voiceEnableBtn = document.getElementById('voiceEnable');
+        var voiceDisableBtn = document.getElementById('voiceDisable');
+        
+        // 生成TTS语音
+        function generateTTS(text, callback) {
+          fetch('/api/tts/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+          })
+          .then(function(response) {
+            if (!response.ok) throw new Error('TTS失败');
+            return response.blob();
+          })
+          .then(function(blob) {
+            var audioUrl = URL.createObjectURL(blob);
+            callback(audioUrl);
+          })
+          .catch(function(err) {
+            console.error('TTS error:', err);
+            callback(null);
+          });
+        }
+        
         // 播放/暂停语音
         function toggleAudio(audio, btn) {
           if (currentAudio && currentAudio !== audio) {
@@ -118,8 +257,63 @@
             currentAudioBtn = null;
           }
         }
-
-        // 初始化音频按钮点击事件
+        
+        // 自动播放欢迎语语音
+        function playWelcomeTTS() {
+          if (!voiceEnabled || welcomeTTSGenerated) return;
+          
+          var welcomeText = '孩子，有什么想了解的，尽管问吧。';
+          var firstMessage = document.querySelector('.bot-message');
+          if (!firstMessage) return;
+          
+          var audioContainer = firstMessage.querySelector('.message-audio');
+          var audioEl = firstMessage.querySelector('.message-audio-player');
+          var audioBtn = firstMessage.querySelector('.audio-play-btn');
+          
+          if (!audioEl || !audioBtn) return;
+          
+          generateTTS(welcomeText, function(audioUrl) {
+            if (audioUrl) {
+              welcomeTTSGenerated = true;
+              audioEl.src = audioUrl;
+              audioBtn.style.display = 'inline-block';
+              
+              audioEl.play().then(function() {
+                audioBtn.textContent = '⏸';
+                currentAudio = audioEl;
+                currentAudioBtn = audioBtn;
+              }).catch(function(e) {
+                console.log('Auto-play blocked:', e);
+              });
+              
+              // 绑定音频按钮
+              audioBtn.onclick = function() {
+                toggleAudio(audioEl, audioBtn);
+              };
+              audioEl.onended = function() {
+                audioBtn.textContent = '▶';
+                currentAudio = null;
+                currentAudioBtn = null;
+              };
+            }
+          });
+        }
+        
+        // 开启语音
+        voiceEnableBtn.onclick = function() {
+          voiceEnabled = true;
+          voiceModal.classList.add('hidden');
+          // 播放欢迎语语音
+          playWelcomeTTS();
+        };
+        
+        // 不开启语音
+        voiceDisableBtn.onclick = function() {
+          voiceEnabled = false;
+          voiceModal.classList.add('hidden');
+        };
+        
+        // 初始化音频按钮点击事件（后续动态生成的按钮也需要绑定）
         document.querySelectorAll('.audio-play-btn').forEach(function(btn) {
           btn.onclick = function() {
             var audioContainer = this.parentElement;
@@ -150,27 +344,6 @@
         var chatInput = document.getElementById('chatInput');
         var sendBtn = document.getElementById('sendBtn');
         var chatMessages = document.getElementById('chatMessages');
-
-        // 生成TTS语音
-        function generateTTS(text, callback) {
-          fetch('/api/tts/stream', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: text })
-          })
-          .then(function(response) {
-            if (!response.ok) throw new Error('TTS失败');
-            return response.blob();
-          })
-          .then(function(blob) {
-            var audioUrl = URL.createObjectURL(blob);
-            callback(audioUrl);
-          })
-          .catch(function(err) {
-            console.error('TTS error:', err);
-            callback(null);
-          });
-        }
 
         function sendMessage() {
           var question = chatInput.value.trim();
@@ -230,32 +403,44 @@
               } else {
                 // 打字完成，生成TTS
                 audioBtn.style.display = 'inline-block';
-                generateTTS(fullText, function(audioUrl) {
-                  if (audioUrl) {
-                    audioEl.src = audioUrl;
-                    // 自动播放
-                    audioEl.play().then(function() {
-                      audioBtn.textContent = '⏸';
-                      currentAudio = audioEl;
-                      currentAudioBtn = audioBtn;
-                    }).catch(function(e) {
-                      console.log('Auto-play blocked:', e);
+                
+                if (voiceEnabled) {
+                  // 自动播放语音
+                  generateTTS(fullText, function(audioUrl) {
+                    if (audioUrl) {
+                      audioEl.src = audioUrl;
+                      audioEl.play().then(function() {
+                        audioBtn.textContent = '⏸';
+                        currentAudio = audioEl;
+                        currentAudioBtn = audioBtn;
+                      }).catch(function(e) {
+                        console.log('Auto-play blocked:', e);
+                      });
+                    }
+                  });
+                }
+                
+                // 绑定音频按钮
+                audioBtn.onclick = function() {
+                  if (!audioEl.src) {
+                    generateTTS(fullText, function(audioUrl) {
+                      if (audioUrl) {
+                        audioEl.src = audioUrl;
+                        toggleAudio(audioEl, audioBtn);
+                      }
                     });
+                  } else {
+                    toggleAudio(audioEl, audioBtn);
                   }
-                });
+                };
+                audioEl.onended = function() {
+                  audioBtn.textContent = '▶';
+                  currentAudio = null;
+                  currentAudioBtn = null;
+                };
               }
             }
             typeWriter();
-            
-            // 绑定音频按钮
-            audioBtn.onclick = function() {
-              toggleAudio(audioEl, audioBtn);
-            };
-            audioEl.onended = function() {
-              audioBtn.textContent = '▶';
-              currentAudio = null;
-              currentAudioBtn = null;
-            };
           })
           .catch(function(err) {
             chatMessages.removeChild(loadingDiv);
