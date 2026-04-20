@@ -105,34 +105,45 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
-/* 页面标题 */
-.page-title {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 80px 20px 30px;
-  background: linear-gradient(to bottom, rgba(10, 5, 3, 0.95) 0%, rgba(10, 5, 3, 0.8) 60%, transparent 100%);
+/* 页面标题 - 与其他模块一致 */
+.page-header {
   text-align: center;
-  z-index: 50;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0;
+  animation: fadeInDown 0.8s ease-out;
 }
 
-.page-title h1 {
-  font-size: 2.2rem;
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  background: linear-gradient(135deg, var(--war-red), #5c0000);
+  border: 2px solid var(--war-gold);
+  border-radius: 50px;
+  margin-bottom: 0.8rem;
+  font-size: 0.95rem;
   color: var(--war-gold);
-  margin: 0 0 8px;
-  text-shadow: 0 0 20px rgba(218, 165, 32, 0.5);
-  letter-spacing: 0.3em;
 }
 
-.page-title p {
-  font-size: 1rem;
-  color: rgba(255, 248, 235, 0.7);
-  margin: 0;
-  letter-spacing: 0.15em;
+.badge-icon {
+  font-size: 1.2rem;
 }
 
 .page-content {
@@ -142,11 +153,9 @@ body {
   align-items: flex-start;
   justify-content: center;
   gap: 40px;
-  padding-top: 140px;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
-  padding-top: 80px;
 }
 
 /* 左侧老兵半身照片 */
