@@ -388,9 +388,12 @@ body {
 }
 
 .module-icon {
-  font-size: 6rem;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 0 10px rgba(218, 165, 32, 0.6));
+  font-size: 2.5rem;
+  position: absolute;
+  top: 0.8rem;
+  left: 1rem;
+  filter: drop-shadow(0 0 8px rgba(218, 165, 32, 0.5));
+  z-index: 2;
 }
 
 .module-text {
