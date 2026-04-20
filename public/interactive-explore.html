@@ -255,6 +255,12 @@
               console.error('语音识别错误:', event.error);
               isRecording = false;
               voiceInputBtn.classList.remove('recording');
+              
+              // 针对网络错误，给用户更友好的提示
+              if (event.error === 'network') {
+                console.warn('语音识别服务暂时不可用，可能是网络连接问题。请检查网络后重试。');
+                alert('语音识别服务暂时不可用，请检查网络连接后重试，或使用键盘输入。');
+              }
             };
             
             recognition.onend = function() {
