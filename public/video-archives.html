@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>珍贵影像 - 抗美援朝老兵数字人</title>
+  <link href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --war-red: #8B0000;
+      --war-gold: #DAA520;
+      --dark-bg: #0a0503;
+      --text-light: #e8dcc8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Serif SC', serif;
+      background: var(--dark-bg);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 战火背景 */
+    .war-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(ellipse at top, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+        linear-gradient(to bottom, #0a0503, #1a0a05);
+      z-index: -1;
+    }
+
+    /* 顶部按钮 */
+    .top-buttons {
+      position: fixed;
+      top: 1.5rem;
+      left: 1.5rem;
+      z-index: 100;
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(135deg, var(--war-red), #5c0000);
+      border: 2px solid var(--war-gold);
+      border-radius: 25px;
+      color: var(--war-gold);
+      font-size: 0.9rem;
+      font-family: 'Noto Serif SC', serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      transform: translateX(-3px);
+      box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+    }
+
+    /* 主标题 */
+    .main-header {
+      text-align: center;
+      padding: 5rem 2rem 2rem;
+    }
+
+    .main-title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--war-red), #5c0000);
+      border: 2px solid var(--war-gold);
+      border-radius: 25px;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .badge-icon {
+      font-size: 1.2rem;
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      color: var(--war-gold);
+      text-shadow: 0 0 30px rgba(218, 165, 32, 0.5);
+      margin-bottom: 0.5rem;
+    }
+
+    .main-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      opacity: 0.8;
+    }
+
+    /* 内容区域 */
+    .video-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* 视频卡片网格 */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    .video-card {
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(26, 10, 5, 0.8));
+      border: 2px solid var(--war-gold);
+      border-radius: 15px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(218, 165, 32, 0.2);
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #2a1a0a, #1a0f05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-placeholder {
+      font-size: 4rem;
+      opacity: 0.3;
+    }
+
+    .play-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-card:hover .play-overlay {
+      opacity: 1;
+    }
+
+    .play-btn {
+      width: 70px;
+      height: 70px;
+      background: rgba(218, 165, 32, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--dark-bg);
+      cursor: pointer;
+    }
+
+    .video-info {
+      padding: 1.5rem;
+    }
+
+    .video-title {
+      font-size: 1.2rem;
+      color: var(--war-gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .video-desc {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .video-meta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-light);
+      opacity: 0.6;
+    }
+
+    /* 空状态 */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-text {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <!-- 战火背景 -->
+  <div class="war-background"></div>
+
+  <!-- 顶部按钮 -->
+  <div class="top-buttons">
+    <button class="back-button" id="backBtn">
+      <span>←</span>
+      返回互动探究
+    </button>
+  </div>
+
+  <!-- 主标题 -->
+  <header class="main-header">
+    <div class="main-title-badge">
+      <span class="badge-icon">📹</span>
+      知识宝库
+    </div>
+    <h1 class="main-title">珍贵影像</h1>
+    <p class="main-subtitle">珍藏历史画面 传承红色基因</p>
+  </header>
+
+  <!-- 视频内容 -->
+  <div class="video-container">
+    <div class="video-grid">
+      <!-- 影像1 -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <div class="video-placeholder">🎬</div>
+          <div class="play-overlay">
+            <div class="play-btn">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">《英雄儿女》抗美援朝纪录片精选</h3>
+          <p class="video-desc">真实记录抗美援朝战争期间中国人民志愿军的英勇事迹，展现战士们在战场上的铮铮铁骨。</p>
+          <div class="video-meta">
+            <span>时长：15:32</span>
+            <span>来源：珍贵档案</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 影像2 -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <div class="video-placeholder">🎬</div>
+          <div class="play-overlay">
+            <div class="play-btn">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">长津湖战役珍贵历史影像</h3>
+          <p class="video-desc">再现志愿军战士在极寒条件下与敌军英勇作战的壮烈场景，零下40度的坚守令人动容。</p>
+          <div class="video-meta">
+            <span>时长：22:15</span>
+            <span>来源：战地记者</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 影像3 -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <div class="video-placeholder">🎬</div>
+          <div class="play-overlay">
+            <div class="play-btn">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">上甘岭战役战场纪实</h3>
+          <p class="video-desc">43天激烈争夺，志愿军战士在不足3.7平方公里的阵地上抗击敌军190余万发炮弹的轰炸。</p>
+          <div class="video-meta">
+            <span>时长：18:45</span>
+            <span>来源：珍贵档案</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 影像4 -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <div class="video-placeholder">🎬</div>
+          <div class="play-overlay">
+            <div class="play-btn">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">志愿军凯旋归来</h3>
+          <p class="video-desc">1958年最后一批志愿军撤离朝鲜，朝鲜人民含泪送别的感人场面，中朝友谊的珍贵见证。</p>
+          <div class="video-meta">
+            <span>时长：12:08</span>
+            <span>来源：新闻档案</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 影像5 -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <div class="video-placeholder">🎬</div>
+          <div class="play-overlay">
+            <div class="play-btn">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">冰雕连：永不消逝的身影</h3>
+          <p class="video-desc">第9兵团在长津湖战役中，三个连队成建制被冻死在阵地上，他们以战斗姿势永远定格在历史中。</p>
+          <div class="video-meta">
+            <span>时长：20:30</span>
+            <span>来源：军史资料</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 影像6 -->
+      <div class="video-card">
+        <div class="video-thumbnail">
+          <div class="video-placeholder">🎬</div>
+          <div class="play-overlay">
+            <div class="play-btn">▶</div>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3 class="video-title">一级英雄邱少云</h3>
+          <p class="video-desc">为了确保战斗胜利，年仅26岁的邱少云在熊熊烈火中放弃自救，用生命诠释了铁的纪律。</p>
+          <div class="video-meta">
+            <span>时长：14:20</span>
+            <span>来源：英雄传记</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('backBtn').onclick = function() {
+      window.location.href = '/interactive-explore.html';
+    };
+  </script>
+</body>
+</html>

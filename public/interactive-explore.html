@@ -126,11 +126,17 @@
         <!-- 战火背景 -->
         <div class="war-background"></div>
         
-        <!-- 返回按钮 -->
-        <button class="back-button" id="backBtn">
-          <span class="back-icon">←</span>
-          返回主页
-        </button>
+        <!-- 返回按钮和功能按钮 -->
+        <div class="top-buttons">
+          <button class="back-button" id="backBtn">
+            <span class="back-icon">←</span>
+            返回主页
+          </button>
+          <button class="video-button" id="videoBtn">
+            <span class="video-icon">📹</span>
+            珍贵影像
+          </button>
+        </div>
         
         <!-- 页面大标题 - 居中显示 -->
         <header class="main-header">
@@ -524,6 +530,14 @@
           backBtn.onclick = function() {
             window.location.href = '/';
           };
+          
+          // 珍贵影像按钮点击
+          var videoBtn = document.getElementById('videoBtn');
+          if (videoBtn) {
+            videoBtn.onclick = function() {
+              window.location.href = '/video-archives.html';
+            };
+          }
         }
 
         // 发送消息

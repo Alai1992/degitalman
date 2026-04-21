@@ -51,12 +51,18 @@ body {
   background: rgba(10, 5, 0, 0.6);
 }
 
-/* 返回按钮 */
-.back-button {
+/* 顶部按钮容器 */
+.top-buttons {
   position: fixed;
   top: 1.5rem;
   left: 1.5rem;
   z-index: 100;
+  display: flex;
+  gap: 0.8rem;
+}
+
+/* 返回按钮 */
+.back-button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -74,6 +80,31 @@ body {
 .back-button:hover {
   transform: translateX(-3px);
   box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+}
+
+/* 珍贵影像按钮 */
+.video-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background: linear-gradient(135deg, #1a4d1a, #0d260d);
+  border: 2px solid var(--war-gold);
+  border-radius: 25px;
+  color: var(--war-gold);
+  font-size: 0.9rem;
+  font-family: 'Noto Serif SC', serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.video-button:hover {
+  transform: translateX(-3px);
+  box-shadow: 0 4px 15px rgba(218, 165, 32, 0.3);
+}
+
+.video-icon {
+  font-size: 1.1rem;
 }
 
 .back-icon {
