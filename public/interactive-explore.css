@@ -152,9 +152,9 @@ body {
 }
 
 .portrait-frame {
-  width: 420px;
+  width: 300px;
   aspect-ratio: 3 / 4;
-  max-height: 680px;
+  max-height: 480px;
   border: 4px solid var(--war-gold);
   border-radius: 12px;
   overflow: hidden;
