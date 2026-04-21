@@ -6,10 +6,10 @@ import fs from 'fs';
 
 const router = Router();
 
-// 老年男性语音配置 - 使用沧桑老年音色
+// 老年男性语音配置 - 使用苍老沉稳音色
 const VOICE_CONFIG = {
-  speaker: 'zh_male_m301_shaoyun_bigtts', // 邵云 - 沧桑老年男性声音
-  speechRate: -0.1, // 稍慢语速，更显沉稳
+  speaker: 'zh_male_ruyayichen_saturn_bigtts', // 如雅逸尘 - 苍老沉稳男性声音
+  speechRate: -0.15, // 较慢语速，更显苍老
   audioFormat: 'mp3' as const,
   sampleRate: 24000
 };
